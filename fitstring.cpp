@@ -1,7 +1,22 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
+void display(int F[], int len)
+{
+    static int display_i=0;
+    if(display_i<len)
+    {
+        cout<<F[display_i]<<" ";
+        display_i++;
+        display(F,len);
+    }
+    else
+    {
+        display_i=0;
+        return;
+    }
+    
+}
 int checkLenghtOfNumber(int n)
 {
     static int lengthOfNumber=0;
@@ -69,7 +84,7 @@ void fibonacci(int A[],int n,int cur,int next)
         fibonacci(A,n,next,cur+next);
     }
 }
-int controller(int n,int len)
+void controller(int n,int len)
 {
     int A[n],F[len];
     fitsToArray(F,len,n);
@@ -77,18 +92,12 @@ int controller(int n,int len)
     int currentNumber=fitsToNumber(A,F,len-1,len-1);
     cout<<"Decrement FitString: ";
     generate(A,F,currentNumber-1,len);
-    for(int i=0;i<len;i++)
-    {
-        cout<<F[i]<<"  ";
-    }
+    display(F,len);
 
     cout<<"\nIncrement FitString: ";
 
     generate(A,F,currentNumber+1,len);
-    for(int i=0;i<len;i++)
-    {
-        cout<<F[i]<<"  ";
-    }
+    display(F,len);
 }
 int main()
 {
