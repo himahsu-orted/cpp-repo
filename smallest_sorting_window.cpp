@@ -1,19 +1,17 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void swap(int A[],int start, int end)
+void displayPos(int start, int end)
 {
-    int temp=A[start];
-    A[start]=A[end];
-    A[end]=temp;
+    cout<<"Window from "<<start<<" to "<<end;
 }
 void sortingF(int A[],int n)
 {
-    int i=0,j=n-1;
+    int i=0,j=n-1,ePos=0,sPos=0;
     
         while(A[i]<A[i+1] && A[i]<A[j]) i++;
         while(A[j]>A[j-1] && A[j]>A[i]) j--;
-        swap(A,i,j);
+        displayPos(i,j);
 }
 int main()
 {
@@ -21,8 +19,6 @@ int main()
     cin>> n;
     int A[n];
     for(int i=0;i<n;i++)
-    cin>>A[i];
+    cin>>A[n];
     sortingF(A,n);
-    for(int i=0;i<n;i++)
-    cout<<A[i]<<" ";
 }
