@@ -1,15 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+const int SIZE=100;
 struct Stack
 {
     int size;
     int top;
-    int elements[100];
+    int elements[SIZE];
 };
 void push( struct Stack *S,int val)
 {
-    if(S->top>= 100)
+    if(S->top>= SIZE)
     cout<<"Stack Full";
     else
     {
@@ -28,8 +29,8 @@ int pop(struct Stack *S)
 }
 int main()
 {
-    struct Stack *S1;
-    S1->size=99;
+    struct Stack *S1=new(struct Stack);
+    S1->size=SIZE-1;
     S1->top=-1;
     int n;
     cin>>n;
