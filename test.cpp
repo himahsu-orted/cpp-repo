@@ -1,54 +1,91 @@
-#include <bits/stdc++.h> 
+#include <iostream>
+#include <vector>
+#include <tuple>
 using namespace std;
 
-void swap(int A[],int l, int h)
+// Find a sorted triplet in the given array
+bool findTriplet(vector<int> const &arr, auto& tuple)
 {
-    int temp;
-    temp=A[l];
-    A[l]=A[h];
-    A[h]=temp;
-}
-int breakArray(int A[],int l , int h, int p)
-{
+	// size of the input array
+	int n = arr.size();
 
-    while(l<h)
-    {
-        while(A[l]<p) 
-        {
-            l++;
-        }
-        while(A[h]>p) 
-        {
-            h--;
-        }
-        if(l<h) 
-        {
-            swap(A,l,h);
-        }
-    }
-    swap(A,l,h);
-    return h;
+	// sorted triplet is not possible on input having less than 3 elements
+	if (n < 3)
+		return false;
+
+	// min[i] = j where 0 <= j < i and arr[j] < arr[i]
+	// min[i] = -1 when arr[j] > arr[i] for every index j < i
+	vector<int> min(n, -1);
+
+	// keep an index to the minimum element found so far
+	// while traversing the array from left to right
+	int min_index_so_far = 0;
+
+	// start from the 1st index as min[0] would be -1
+	for (int i = 1; i < n; i++)
+	{
+		// update min_index_so_far if current index has less value, else
+		// update min[i] with the smallest index to its left
+		if (arr[i] < arr[min_index_so_far])
+			min_index_so_far = i;
+		else
+			min[i] = min_index_so_far;
+	}
+
+	// max[i] = j where i < j < n and arr[i] < arr[j]
+	// max[i] = -1 when arr[j] < arr[i] for every index j > i
+	vector<int> max(n, -1);
+
+	// keep an index to the maximum element found so far
+	// while traversing the array from right to left
+	int max_index_so_far = n - 1;
+
+	// start from the second last index as max[n-1] would be -1
+	for (int i = n - 2; i >= 0; i--)
+	{
+		// update max_index_so_far if current index has more value, else
+		// update max[i] with the greatest index to its right
+		if (arr[i] > arr[max_index_so_far]) {
+			max_index_so_far = i;
+		}
+		else
+			max[i] = max_index_so_far;
+	}
+
+	// traverse the array again and find an index which has both a min
+	// element on its left and a max element on its right
+	for (int i = 0; i < n; i++)
+	{
+		if (min[i] != -1 && max[i] != -1)
+		{
+			// create a tuple of the found triplet and returns true
+			tuple = make_tuple(min[i], i, max[i]);
+			return true;
+		}
+	}
+
+	// no triplet found
+	return false;
 }
-void quickSort(int A[],int low,int high)
-{
-    int pos;
-    if(low<high)
-    {
-        pos=breakArray(A,low,high,A[low]);
-        quickSort(A,low, pos);
-        quickSort(A, pos+1,high);
-    }
-}
+
 int main()
 {
-    int n;
-    cin>>n;
-    int A[n];
-    for(int i=0;i<n;i++)
-    cin>>A[i];
+	// input array
+	vector<int> input = { 5, 4, 3, 7, 6, 1, 9 };
 
-    quickSort(A,0,n-1);
+	// create a tuple to store the triplet
+	tuple<int, int, int> triplet;
 
-    for(int i=0;i<n;i++)
-    cout<<A[i]<<" ";
+	// find the triplet
+	if (findTriplet(input, triplet)) {
+		cout << "Triplet found: ("
+			 << input[get<0>(triplet)] << ", "
+			 << input[get<1>(triplet)] << ", "
+			 << input[get<2>(triplet)] << ")";
+	}
+	else {
+		cout << "Triplet not found";
+	}
+
+	return 0;
 }
