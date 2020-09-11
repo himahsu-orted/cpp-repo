@@ -67,7 +67,7 @@ int main()
             }
             else if(sym.at(i)==')')
             {
-                while(peek(S1)!=')')
+                while(peek(S1)!='(')
                 {
                     if(peek(S1)!='(')
                     cout<<pop(S1);
@@ -75,6 +75,9 @@ int main()
                     if(S1->top==-1)
                     break;
                 }
+                if(peek(S1)!='(')
+                cout<<pop(S1);
+                else pop(S1);
             }
             else if(S1->top==-1)
             {
