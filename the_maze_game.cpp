@@ -76,7 +76,7 @@ void navigateGame(struct Stack *S, int i,int j,int dx,int dy)
     if(i==dx && j==dy)
     {
         S->elements[i][j]=2;
-        cout<<"1";
+        cout<<"Way Founded";
     }
     else if(S->elements[i][j-1]==1)
     {
@@ -129,7 +129,7 @@ void navigateGame(struct Stack *S, int i,int j,int dx,int dy)
     }
     else
     {
-        cout<<"0";
+        cout<<"No Way Out!";
     }  
 }
 int main()
@@ -141,16 +141,47 @@ int main()
     int i,j;
     int sx,sy,dx,dy;
     assignPath(S1);
-    
-    cin>>dx>>dy;
+
+    cout<<"Enter the statring point: ";
+    sHere:
     cin>>sx>>sy;
-    if(S1->elements[sx][sy]!=0 && S1->elements[dx][dy]!=0)
+    if(S1->elements[sx][sy]==0)
     {
-       push(S1,sx,sy);
-       navigateGame(S1,sx,sy,dx,dy);
+        cout<<"Invalid Position. Enter again. \n";
+        goto sHere;
     }
-    else
+    cout<<"Enter the Destination point: ";
+    dHere:
+    cin>>dx>>dy;
+    if(S1->elements[dx][dy]==0)
     {
-        cout<<"0";
+        cout<<"Invalid Position. Enter again. \n";
+        goto dHere;
+    }
+    push(S1,sx,sy);
+    navigateGame(S1,sx,sy,dx,dy);
+    cout<<endl;
+    while (S1->top>0)
+    {
+        cout<<pop(S1)<<" ";
+    }
+    cout<<endl<<endl;
+    for(i=0;i<8;i++)
+    {
+        for(j=0;j<8;j++)
+        {
+            if(S1->elements[i][j]==2)
+            {
+                if(i==sx && j==sy)
+                cout<<"S ";
+                else if(i==dx && j==dy)
+                cout<<"D ";
+                else
+                cout<<"*"<<" ";
+            }
+            else
+            cout<<"0"<<" ";
+        }
+        cout<<endl;
     }
 }

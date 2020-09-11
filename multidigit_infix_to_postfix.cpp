@@ -49,6 +49,7 @@ int main()
     struct Stack *S1=new(struct Stack);
     S1->size=SIZE-1;      
     S1->top=-1;
+    int j=0,num=0;
     
     string sym;
     cin>>sym;
@@ -60,6 +61,7 @@ int main()
         }
         else
         {
+            cout<<"  ";
             if(sym.at(i)=='(')
             {
                 push(S1,sym.at(i));
@@ -75,7 +77,7 @@ int main()
                     break;
                 }
                 if(peek(S1)!='(')
-                cout<<pop(S1);
+                cout<<pop(S1)<<" ";
                 else pop(S1);
             }
             else if(S1->top==-1)
@@ -90,7 +92,7 @@ int main()
                 }
                 else
                 {
-                    cout<<pop(S1);
+                    cout<<pop(S1)<<" ";
                     push(S1,sym.at(i));
                 }
             }
@@ -99,5 +101,5 @@ int main()
         
     }
     while(S1->top>-1)
-    cout<<pop(S1);
+    cout<<pop(S1)<<" ";
 }
