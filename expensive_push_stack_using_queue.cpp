@@ -48,26 +48,19 @@ int deq(struct Queue *Q)
     }
     return t;
 }
-bool isSecondLast(struct Queue *Q)
+void push(struct Queue *Q1,struct Queue *Q2)
 {
-    if(Q->rear==Q->front)
-    return true;
-    else 
-    return false;
-}
-void push(struct Queue *Q)
-{
-    int val;
-    cin>>val;
-    enq(Q,val);
-}
-void pop(struct Queue *Q1,struct Queue *Q2)
-{
-    while(!isSecondLast(Q1))
+    int n;
+    cin>>n;
+    while(Q1->rear>-1)
     enq(Q2,deq(Q1));
-    cout<<deq(Q1);
+    enq(Q1,n);
     while(Q2->rear>-1)
     enq(Q1,deq(Q2));
+}
+int pop(struct Queue *Q)
+{
+    return deq(Q);
 }
 int main()
 {
@@ -88,9 +81,9 @@ int main()
         int choice;
         cin>>choice;
         if(choice==1)
-        push(Q1);
+        push(Q1,Q2);
         else 
-        pop(Q1,Q2);
+        cout<<pop(Q1);
         cout<<"\nDo you want to continue? ";
         cin>>ch;
     }while(ch=='y'|| ch=='Y');

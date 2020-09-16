@@ -7,12 +7,12 @@ struct Queue
     int size;
     int front;
     int rear;
-    int elements[SIZE];
+    char elements[SIZE];
 };
-void enq( struct Queue *Q,int val)
+void enq( struct Queue *Q,char val)
 {
     if((Q->rear+1)%Q->size==Q->front)
-    cout<<"Stack(Meaning the queue) is full.";
+    cout<<"Queue Full";
     else
     {
         if(Q->front==-1)
@@ -27,11 +27,11 @@ void enq( struct Queue *Q,int val)
         Q->elements[Q->rear]=val;
     }
 }
-int deq(struct Queue *Q)
+char deq(struct Queue *Q)
 {
-    int t;
+    char t;
     if(Q->front==-1)
-    cout<<"Stack(Meaning the queue) is empty.";
+    cout<<"Queue Empty";
     else
     {
         if(Q->front==Q->rear)
@@ -48,26 +48,15 @@ int deq(struct Queue *Q)
     }
     return t;
 }
-bool isSecondLast(struct Queue *Q)
+void rev(struct Queue *Q)
 {
-    if(Q->rear==Q->front)
-    return true;
-    else 
-    return false;
-}
-void push(struct Queue *Q)
-{
-    int val;
-    cin>>val;
-    enq(Q,val);
-}
-void pop(struct Queue *Q1,struct Queue *Q2)
-{
-    while(!isSecondLast(Q1))
-    enq(Q2,deq(Q1));
-    cout<<deq(Q1);
-    while(Q2->rear>-1)
-    enq(Q1,deq(Q2));
+    char temp;
+    if(Q->rear!=-1)
+    {
+        temp=deq(Q);
+        rev(Q);
+        enq(Q,temp);
+    }
 }
 int main()
 {
@@ -81,17 +70,20 @@ int main()
     Q2->front=-1;
     Q2->rear=-1;
 
-    char ch;
-    do
+    string sym;
+    cin>>sym;
+    for(int i=0;i<sym.length();i++)
     {
-        cout<<"1. Push\n2. Pop   ";
-        int choice;
-        cin>>choice;
-        if(choice==1)
-        push(Q1);
-        else 
-        pop(Q1,Q2);
-        cout<<"\nDo you want to continue? ";
-        cin>>ch;
-    }while(ch=='y'|| ch=='Y');
+        enq(Q1,sym.at(i));
+        enq(Q2,sym.at(i));
+    }
+    rev(Q1);
+    while(Q2->rear>-1)
+    {
+        if(deq(Q1)!=deq(Q2))
+        break;
+    }
+    if(Q2->rear>-1)
+    cout<<"0";
+    else cout<<"1";
 }
