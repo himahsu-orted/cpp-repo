@@ -27,6 +27,13 @@ int pop(struct Stack *S)
     t=S->elements[S->top--];
     return(t); 
 }
+bool isSecondLast(struct Stack *S)
+{
+    if(S->top==0)
+    return true;
+    else 
+    return false;
+}
 void holdInStack(struct Stack *S,int val)
 {
     if(S->top<0)
@@ -50,24 +57,43 @@ void stackRev(struct Stack *S)
         holdInStack(S,val);
     }
 }
+void enq(struct Stack *S)
+{
+
+    int num;
+    cin>>num;
+    push(S,num);
+
+}
+int deq(struct Stack *S)
+{
+    int t;
+    stackRev(S);
+    t=pop(S);
+    stackRev(S);
+}
 int main()
 {
     struct Stack *S1=new(struct Stack);
     S1->size=SIZE-1;
     S1->top=-1;
+    
+    struct Stack *S2=new(struct Stack);
+    S2->size=SIZE-1;
+    S2->top=-1;
+
     int n;
     char ch;
     do
     {
-        cout<<"\nEnter the value: ";
-        cin>>n;
-        push(S1,n);
-        cout<<"\nDo you want to add more? y/n ";
-        cin>> ch;
+        cout<<"1. Push\n2. Pop   ";
+        int choice;
+        cin>>choice;
+        if(choice==1)
+        enq(S1);
+        else 
+        cout<<deq(S1);
+        cout<<"\nDo you want to continue? ";
+        cin>>ch;
     }while(ch=='y'|| ch=='Y');
-    stackRev(S1);
-    cout<<endl;
-    while(S1->top>-1)
-    cout<<pop(S1)<<" ";
-    
 }
