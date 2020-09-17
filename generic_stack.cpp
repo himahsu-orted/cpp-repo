@@ -83,7 +83,7 @@ char popChar(struct Stack *S)
     cout<<"Stack Empty";
     else
     t=S->obj[S->top--]->charVal;
-    return(t); 
+    return(t);
 }
 bool popBool(struct Stack *S)
 {
