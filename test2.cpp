@@ -1,45 +1,157 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-struct Stack
+struct node
 {
-    int size;
-    int top;
-    int elements[100];
+    int data;
+    struct node *next;
 };
-void push( struct Stack *S,int val)
+void insert(struct node *START)
 {
-    if(S->top>= 100)
-    cout<<"Stack Full";
-    else
+    struct node *END,*CUR;
+    END=START;
+    int n;
+    cin>>n;
+    while(n>-1)
     {
-        S->top=S->top+1;
-        S->elements[S->top]=val;
+        CUR=new(struct node);
+        CUR->data=n;
+        CUR->next=NULL;
+        END->next=CUR;
+        END=CUR;
+        cin>>n;
     }
 }
-int pop(struct Stack *S)
+void displayAll(struct node *S)
 {
-    int t;
-    if(S->top<0)
-    cout<<"Stack Empty";
-    else
-    t=S->elements[S->top--];
-    return(t); 
+    if(S!=NULL)
+    {
+        
+        cout<<S->data<<" ";
+        displayAll(S->next);
+    }
+}
+void findNumber(struct node *S)
+{
+    int n;
+    cin>>n;
+    while(S!=NULL)
+    {
+        if(n==S->data)
+        {
+            cout<<"1";
+            return;
+        }
+        else
+        {
+            S=S->next;
+        }
+        
+    }
+    cout<<"0";
+}
+void displayRev(struct node *S)
+{
+    if(S!=NULL)
+    {
+        displayRev(S->next);
+        cout<<S->data<<" ";
+    }
+}
+void findMin(struct node *C)
+{
+    int min=C->data;
+    while(C!=NULL)
+    {
+        if(C->data<min)
+        min=C->data;
+        C=C->next;
+    }
+    cout<<min;
+}
+void findMax(struct node *C)
+{
+    int max=C->data;
+    while(C!=NULL)
+    {
+        if(C->data>max)
+        max=C->data;
+        C=C->next;
+    }
+    cout<<max;
+}
+void findMiddleNode(struct node *C)
+{
+    struct node *SP;
+    SP=C;
+    while(C->next!=NULL)
+    {
+        C=C->next;
+        if(C->next!=NULL)
+        {
+            C=C->next;
+            SP=SP->next;
+        }
+        else 
+        break;
+    }
+    cout<<SP->data;
+}
+void countNodes(struct node *C)
+{
+    int count=0;
+    while(C!=NULL)
+    {
+        count++;
+        C=C->next;
+    }
+    cout<<count;
+}
+void numberOfOdds(struct node *C)
+{
+    int count=0;
+    while(C!=NULL)
+    {
+        if(C->data%2!=0)
+        count++;
+        C=C->next;
+    }
+    cout<<count;
+}
+void numberOfEvens(struct node *C)
+{
+    int count=0;
+    while(C!=NULL)
+    {
+        if(C->data%2==0)
+        count++;
+        C=C->next;
+    }
+    cout<<count;
 }
 int main()
 {
-    struct Stack *S1;
-    S1->size=99;
-    S1->top=-1;
     int n;
     cin>>n;
-    while(n>0)
-    {
-        push(S1,n%10);
-        n=n/10;
-    }
-    while(S1->top>-1)
-    {
-        cout<<pop(S1)<<" ";
-    } 
+    struct node *START;
+    START=new(struct node);
+    START->data=n;
+    START->next=NULL;
+    insert(START);
+    displayAll(START);
+    cout<<endl;
+    displayRev(START);
+    cout<<endl;
+    countNodes(START);
+    cout<<endl;
+    findMin(START);
+    cout<<endl;
+    findMax(START);
+    cout<<endl;
+    findMiddleNode(START);
+    cout<<endl;
+    numberOfOdds(START);
+    cout<<endl;
+    numberOfEvens(START);
+    cout<<endl;
+    findNumber(START);
 }

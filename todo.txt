@@ -1,1 +1,22 @@
--+*9+28*+4863
+Linked List Operations :
+
+Create a Linked list with given numbers termination of input is -1   ( you have to read with cin>>  )
+
+Print all data values  (you have to use cout<<  )
+
+Print all data values in reverse order  ( you have to use cout << )
+
+Print the count of number of nodes ( how many nodes ) ( one cout<< )
+
+Print minimum of all data values ( one cout <<)
+
+Print maximum of all data values ( one cout <<)
+
+Print middle node data value ( one cout <<  , the input , that I give as test case, will have odd number count, so that you can comfortably find the middle node)
+
+Print number of odd data values  ( one cout << )
+
+Print number of even data values ( one cout << )
+
+Find k, ( one cin>>k , and if found you have to cout <<     1  , not found cout <<    0 
+
