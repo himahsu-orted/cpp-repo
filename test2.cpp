@@ -1,13 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
-struct node
+typedef struct node
 {
     int data;
     struct node *next;
-};
-void insert(struct node *START)
+} * LL;
+void insert(LL START)
 {
-    struct node *END,*CUR;
+    LL END,CUR;
     END=START;
     int n;
     cin>>n;
@@ -21,7 +21,7 @@ void insert(struct node *START)
         cin>>n;
     }
 }
-void displayAll(struct node *S)
+void displayAll(LL S)
 {
     if(S!=NULL)
     {
@@ -30,7 +30,7 @@ void displayAll(struct node *S)
         displayAll(S->next);
     }
 }
-void findNumber(struct node *S)
+void findNumber(LL S)
 {
     int n;
     cin>>n;
@@ -49,7 +49,7 @@ void findNumber(struct node *S)
     }
     cout<<"0";
 }
-void displayRev(struct node *S)
+void displayRev(LL S)
 {
     if(S!=NULL)
     {
@@ -57,7 +57,7 @@ void displayRev(struct node *S)
         cout<<S->data<<" ";
     }
 }
-void findMin(struct node *C)
+void findMin(LL C)
 {
     int min=C->data;
     while(C!=NULL)
@@ -68,7 +68,7 @@ void findMin(struct node *C)
     }
     cout<<min;
 }
-void findMax(struct node *C)
+void findMax(LL C)
 {
     int max=C->data;
     while(C!=NULL)
@@ -79,9 +79,9 @@ void findMax(struct node *C)
     }
     cout<<max;
 }
-void findMiddleNode(struct node *C)
+void findMiddleNode(LL C)
 {
-    struct node *SP;
+    LL SP;
     SP=C;
     while(C->next!=NULL)
     {
@@ -96,7 +96,7 @@ void findMiddleNode(struct node *C)
     }
     cout<<SP->data;
 }
-void countNodes(struct node *C)
+void countNodes(LL C)
 {
     int count=0;
     while(C!=NULL)
@@ -106,7 +106,7 @@ void countNodes(struct node *C)
     }
     cout<<count;
 }
-void numberOfOdds(struct node *C)
+void numberOfOdds(LL C)
 {
     int count=0;
     while(C!=NULL)
@@ -117,7 +117,7 @@ void numberOfOdds(struct node *C)
     }
     cout<<count;
 }
-void numberOfEvens(struct node *C)
+void numberOfEvens(LL C)
 {
     int count=0;
     while(C!=NULL)
@@ -132,7 +132,7 @@ int main()
 {
     int n;
     cin>>n;
-    struct node *START;
+    LL START;
     START=new(struct node);
     START->data=n;
     START->next=NULL;
