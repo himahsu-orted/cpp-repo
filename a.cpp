@@ -1,493 +1,321 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+const int SIZE=100;
 
-typedef struct node
+union u
 {
-    int data;
-    struct node *next;
-} * LL;
-void insert(LL START)
+    int intVal;
+    char charVal;
+    bool boolVal;
+    float floatVal;
+};
+struct Queue
 {
-    LL END,CUR;
-    END=START;
-    int n;
-    cin>>n;
-    while(n>-1)
-    {
-        CUR=new(struct node);
-        CUR->data=n;
-        CUR->next=NULL;
-        END->next=CUR;
-        END=CUR;
-        cin>>n;
-    }
-}
-void displayAll(LL S)
+    int size;
+    int front;
+    int rear;
+    int flag[SIZE];
+    union u *obj[SIZE];
+};
+struct BQ
 {
-    if(S!=NULL)
-    {
-        
-        cout<<S->data<<" ";
-        displayAll(S->next);
-    }
-}
-void deleteEnd(LL C)
-{
-    while(C!=NULL)
-    {
-        if((C->next->next)==NULL)
-        {
-            C->next=NULL;
-            break;
-        }
-        C=C->next;
-    }
-}
-void addInFront(LL (&START),int n)
-{
-    LL CUR;
-    CUR=new(struct node);
-    CUR->data=n;
-    CUR->next=START;
-    START=CUR;
-}
-int countNodes(LL C)
-{
-    int count=0;
-    while(C!=NULL)
-    {
-        count++;
-        C=C->next;
-    }
-    return count;
-}
-void palindrome(LL C)
-{
-    LL SP,CON;
-    SP=C;
-    CON=C;
-    while(C->next!=NULL)
-    {
-        C=C->next;
-        if(C->next!=NULL)
-        {
-            C=C->next;
-            SP=SP->next;
-        }
-        else 
-        break;
-    }
-    int count=0;
-    if(countNodes(SP)%2==0)
-    {
-        SP=SP->next;
-        count=1;
-    }
-    
-    while(SP!=NULL)
-    {
-        addInFront(CON,SP->data);
-        count++;
-        SP=SP->next;
-    }
-    while(count>1)
-    {  
-        deleteEnd(CON);
-        count--;
-    }
-    
-    LL CP,LP;
-    CP=CON;
-    LP=CON;
-    while(CP->next!=NULL)
-    {
-        CP=CP->next;
-        if(CP->next!=NULL)
-        {
-            CP=CP->next;
-            LP=LP->next;
-        }
-        else 
-        break;
-    }
-    LP=LP->next;
-    while(LP!=NULL)
-    {
-        if(LP->data!=CON->data)
-        {
-            cout<<0;
-            return;
-        }
-        else
-        {
-            LP=LP->next;
-            CON=CON->next;
-        }
-    }
-    cout<<1;
-}
-void deleteK(LL C,int k)
-{
-    LL SP;
-    SP=C;
-    
-        while(C!=NULL)
-        {
-            if(C->data==k)
-            {
-                while(SP!=NULL)
-                {
-                    if(SP->next==C)
-                    {
-                        SP->next=C->next;
-                        return;
-                    }
-                    SP=SP->next;
-                }
-            }
-            C=C->next;
-        }
-    
-}void removeLastDup(LL C)
-{
-    LL PER=C;
-    LL FOUND=C;
-    while(PER->next!=NULL)
-    {
-        while(C->next!=NULL)
-        {
-            if(C->next->data==PER->data)
-            {
-                FOUND=C;
-            }
-            C=C->next;
-        }
-        if(FOUND!=PER)
-        {
-            if(FOUND->next->next!=NULL)
-            FOUND->next=FOUND->next->next;
-            else 
-            {
-                FOUND->next=NULL;
-            }
-        }
-        if(PER->next!=NULL)
-        {
-            PER=PER->next;
-            C=PER;
-            FOUND=C;
-        }
-        else break;
-        
-    }
-}
-void removeUnsortedDup(LL C)
-{
-    LL PER=C;
-    while(PER->next!=NULL)
-    {
-        while(C->next!=NULL)
-        {
-            if(C->next->data==PER->data)
-            {
-                if(C->next->next!=NULL)
-                C->next=C->next->next;
-                else 
-                {
-                    C->next=NULL;
-                    break;
-                }
-            }
-            C=C->next;
-        }
-        if(PER->next!=NULL)
-        PER=PER->next;
-        else break;
-        C=PER;
-    }
-}
-void removeSortedDup(LL C,LL PER)
-{
+    int size;
+    int front;
+    int rear;
+    struct Queue *data[SIZE];
+};
 
-    if(C->next!=NULL)
-    {
-        if(PER->data==C->next->data)
-        {
-            C=C->next;
-        }
-        else
-        {
-            PER->next=C->next;
-            C=C->next;
-            PER=C;
-        }
-        removeSortedDup(C,PER);
-    }
-    else 
-    PER->next=NULL;
-}
-
-struct node *createList()
+void ENQ(struct BQ *Q, struct Queue *data)
 {
-    int n;
-    LL L1;
-
-    cin>>n;
-    L1=new(struct node);
-    L1->data=n;
-    L1->next=NULL;
-    insert(L1);
-
-    return L1;
-}
-struct node *evenOdd(LL C)
-{
-    LL R=new(struct node),TEMP=C;
-    LL END,CUR;
-    END=R;
-    CUR=R;
-    while(C!=NULL)
-    {
-        if(C->data%2==0)
-        {
-            CUR->data=C->data;
-            END=new(struct node);
-            CUR->next=END;
-            CUR=END;
-        }
-        C=C->next;
-    }
-    while(TEMP!=NULL)
-    {
-        if(TEMP->data%2!=0)
-        {
-            CUR->data=TEMP->data;
-            if(TEMP->next!=NULL)
-            END=new(struct node);
-            CUR->next=END;
-            CUR=END;
-        }
-        TEMP=TEMP->next;
-    }
-    deleteEnd(R);
-    return R;
-    
-}
-void insertBefore(LL C,int n,int k)
-{
-    LL SP,ADD;
-    SP=C;
-    ADD=new(struct node);
-    while(C!=NULL)
-    {
-        if(n==C->data)
-        {
-            while(SP!=NULL)
-            {
-                if(SP->next==C)
-                {
-                    ADD->data=k;
-                    ADD->next=C;
-                    SP->next=ADD;
-                    return;
-                }
-                SP=SP->next;
-            }
-        }
-        C=C->next;
-    }
-}
-struct node *insSort(LL C)
-{
-    LL R=new(struct node);
-    LL END,CUR,TEMP;
-    END=R;
-    CUR=R;
-
-    R->data=C->data;
-    R->next=NULL;
-
-    C=C->next;
-    while(C!=NULL)
-    {
-        if(C->data>=END->data)
-        {
-            CUR=new(struct node);
-            CUR->data=C->data;
-            END->next=CUR;
-            END=CUR;
-        }
-        else 
-        {
-            TEMP=R;
-            if(C->data<R->data)
-            {
-                addInFront(R,C->data);
-            }   
-            else
-            {
-                while(TEMP!=NULL)
-                {
-                    if(TEMP->data>C->data)
-                    {
-                        insertBefore(R,TEMP->data,C->data);
-                        break;
-                    }
-                    TEMP=TEMP->next;
-                }
-            }
-        }
-        C=C->next;
-    }
-    return R;
-
-
-}
-struct node *rev(LL C)
-{
-    static LL PER;
-    if(C->next==NULL)
-    {
-        PER=C;
-        return PER;
-    }
+    if((Q->rear+1)%Q->size==Q->front)
+    cout<<"Queue Full";
     else
     {
-        rev(C->next);  
-        LL P=C->next;
-        P->next=C;
-        C->next=NULL;
-        return PER;
+        if(Q->front==-1)
+        {
+            Q->front=0;
+            Q->rear=0;
+        }
+        else
+        {
+            Q->rear=(Q->rear+1)%Q->size;
+        }
+        Q->data[Q->rear]=data;
     }
 }
-void swapK(LL C)
+struct Queue *DNQ(struct BQ *Q)
 {
-    int k,i=0,j=0;
-    cin>>k;
-
-    LL S=C;
-    LL E=C;
-    LL TEMP;
-    while(C!=NULL)
+    struct Queue *t;
+    if(Q->front==-1)
+    cout<<"Queue Empty";
+    else
     {
-        i++;
-        if(i==k)
-        S=C;
-
-        TEMP=C;
-        while(TEMP!=NULL)
+        if(Q->front==Q->rear)
         {
-            j++;
-            TEMP=TEMP->next;
+            t=Q->data[Q->front];
+            Q->front=-1;
+            Q->rear=-1;
         }
-        if(j==k)
+        else
         {
-            E=C;
-            break;
+            t=Q->data[Q->front];
+            Q->front=(Q->front+1)%Q->size;
         }
-        else 
-        {
-            j=0;
-        }
-
-        C=C->next;
     }
-
-    k=S->data;
-    S->data=E->data;
-    E->data=k;
+    return t;
 }
-void inL1(LL C, LL D)
+
+void enqInt( struct Queue *Q,int val)
 {
-    LL TEMP=D;
-    while(C!=NULL)
+    if((Q->rear+1)%Q->size==Q->front)
+    cout<<"Queue Full";
+    else
     {
-        TEMP=D;
-        if(C->data==TEMP->data)
+        if(Q->front==-1)
         {
-            while(TEMP!=NULL)
-            {
-                if(TEMP->data==C->data)
-                {
-                    C=C->next;
-                    TEMP=TEMP->next;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            if(TEMP==NULL)
-            {
-                cout<<1;
-                return;
-            }
+            Q->front=0;
+            Q->rear=0;
         }
-        C=C->next;
+        else
+        {
+            Q->rear=(Q->rear+1)%Q->size;
+        }
+        Q->flag[Q->rear]=1;
+        Q->obj[Q->rear]=new(union u);
+        Q->obj[Q->rear]->intVal=val;
     }
-    cout<<0;
 }
-void comb(LL C, LL D)
+void enqChar( struct Queue *Q,char val)
 {
-    while(C!=NULL && D!=NULL)
+    if((Q->rear+1)%Q->size==Q->front)
+    cout<<"Queue Full";
+    else
     {
-        cout<<C->data<<" "<<D->data<<" ";
-        C=C->next;
-        D=D->next;
+        if(Q->front==-1)
+        {
+            Q->front=0;
+            Q->rear=0;
+        }
+        else
+        {
+            Q->rear=(Q->rear+1)%Q->size;
+        }
+        Q->flag[Q->rear]=2;
+        Q->obj[Q->rear]=new(union u);
+        Q->obj[Q->rear]->charVal=val;
     }
-    while(C!=NULL)
+}
+void enqBool( struct Queue *Q,bool val)
+{
+    if((Q->rear+1)%Q->size==Q->front)
+    cout<<"Queue Full";
+    else
     {
-        cout<<C->data<<" ";
-        C=C->next;
+        if(Q->front==-1)
+        {
+            Q->front=0;
+            Q->rear=0;
+        }
+        else
+        {
+            Q->rear=(Q->rear+1)%Q->size;
+        }
+        Q->flag[Q->rear]=3;
+        Q->obj[Q->rear]=new(union u);
+        Q->obj[Q->rear]->boolVal=val;
     }
-    while(D!=NULL)
+}
+void enqFloat( struct Queue *Q,float val)
+{
+    if((Q->rear+1)%Q->size==Q->front)
+    cout<<"Queue Full";
+    else
     {
-        cout<<D->data<<" ";
-        D=D->next;
+        if(Q->front==-1)
+        {
+            Q->front=0;
+            Q->rear=0;
+        }
+        else
+        {
+            Q->rear=(Q->rear+1)%Q->size;
+        }
+        Q->flag[Q->rear]=4;
+        Q->obj[Q->rear]=new(union u);
+        Q->obj[Q->rear]->floatVal=val;
+    }
+}
+int deqInt(struct Queue *Q)
+{
+    int t;
+    if(Q->front==-1)
+    cout<<"Queue Empty";
+    else
+    {
+        if(Q->front==Q->rear)
+        {
+            t=Q->obj[Q->front]->intVal;
+            Q->front=-1;
+            Q->rear=-1;
+        }
+        else
+        {
+            t=Q->obj[Q->front]->intVal;
+            Q->front=(Q->front+1)%Q->size;
+        }
+    }
+    return t;
+}
+char deqChar(struct Queue *Q)
+{
+    char t;
+    if(Q->front==-1)
+    cout<<"Queue Empty";
+    else
+    {
+        if(Q->front==Q->rear)
+        {
+            t=Q->obj[Q->front]->charVal;
+            Q->front=-1;
+            Q->rear=-1;
+        }
+        else
+        {
+            t=Q->obj[Q->front]->charVal;
+            Q->front=(Q->front+1)%Q->size;
+        }
+    }
+    return t;
+}
+bool deqBool(struct Queue *Q)
+{
+    bool t;
+    if(Q->front==-1)
+    cout<<"Queue Empty";
+    else
+    {
+        if(Q->front==Q->rear)
+        {
+            t=Q->obj[Q->front]->boolVal;
+            Q->front=-1;
+            Q->rear=-1;
+        }
+        else
+        {
+            t=Q->obj[Q->front]->boolVal;
+            Q->front=(Q->front+1)%Q->size;
+        }
+    }
+    return t;
+}
+float deqFloat(struct Queue *Q)
+{
+    float t;
+    if(Q->front==-1)
+    cout<<"Queue Empty";
+    else
+    {
+        if(Q->front==Q->rear)
+        {
+            t=Q->obj[Q->front]->floatVal;
+            Q->front=-1;
+            Q->rear=-1;
+        }
+        else
+        {
+            t=Q->obj[Q->front]->floatVal;
+            Q->front=(Q->front+1)%Q->size;
+        }
+    }
+    return t;
+}
+int flagCheck(struct Queue *Q)
+{
+    return Q->flag[Q->front];
+}
+
+struct Queue *inp()
+{
+    struct Queue *Q1=new(struct Queue);
+    Q1->size=SIZE-1;
+    Q1->front=-1;
+    Q1->rear=-1;
+
+    int ival;
+    char cval;
+    float fval;
+    bool bval;
+
+    char ch;
+    
+    do
+    {
+        cout<<"\nStore what? 1.Integer\n2.Character\n3.Bool\n4.Float...";
+        int choice;
+        cin>>choice;
+        switch(choice)
+        {
+            case 1:
+                cin>>ival;
+                enqInt(Q1,ival);
+                break;
+            case 2:
+                cin>>cval;
+                enqChar(Q1,cval);
+                break;
+            case 3:
+                cin>>bval;
+                enqBool(Q1,bval);
+                break;
+            case 4:
+                cin>>fval;
+                enqFloat(Q1,fval);
+                break;
+            default:
+                cout<<"Invalid Input !";
+        }
+        cout<<"\nDo you want to enter more? y/n... ";
+        cin>>ch;
+    }while(ch=='y'|| ch=='Y');
+    cout<<endl;
+    return Q1;
+    
+}
+void oup( struct Queue *Q1)
+{
+    while(Q1->front>-1)
+    {
+        if(flagCheck(Q1)==1)
+        cout<<deqInt(Q1)<<" ";
+        else if(flagCheck(Q1)==2)
+        cout<<deqChar(Q1)<<" ";
+        else if(flagCheck(Q1)==3)
+        cout<<deqBool(Q1)<<" ";
+        else
+        cout<<deqFloat(Q1)<<" ";
     }
 }
 int main()
 {
-    
-    LL C,D;
-    C=createList();
-    palindrome(C);
+    struct BQ *Q=new(struct BQ);
+    Q->size=SIZE-1;
+    Q->front=-1;
+    Q->rear=-1;
 
-    C=createList();
-    removeSortedDup(C,C);
-    displayAll(C);
-
-    C=createList();
-    removeUnsortedDup(C);
-    displayAll(C);
-
-    C=createList();
-    removeLastDup(C);
-    displayAll(C);
-
-    C=createList();
-    C=evenOdd(C);
-    displayAll(C);
-
-    C=createList();
-    C=insSort(C);
-    displayAll(C);
-    
-    C=createList();
-    LL PER=C;
-    C=rev(C);
-    displayAll(C);
-
-    C=createList();
-    swapK(C);
-    displayAll(C);
-
-    C=createList();
-    D=createList();
-    inL1(C,D);
-
-    C=createList();
-    D=createList();
-    comb(C,D);
+    char ch;
+    cout<<"ENQUE:\n";
+    do
+    {
+        ENQ(Q,inp());
+        cout<<"Do you want to continue? y/n";
+        cin>>ch;
+    } while (ch=='y'||ch=='Y');
+    cout<<"\nDENQUE:\n";
+    do
+    {
+        oup(DNQ(Q));
+        cout<<"Do you want to continue? y/n";
+        cin>>ch;
+    } while (ch=='y'||ch=='Y');
 }
