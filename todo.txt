@@ -21,7 +21,7 @@
 14. Recursive Selection sort , Bubble sort
 15.Given a nonnegative integer n, write a function that lists all strings formed from exactly       n     pairs of balanced parentheses. For example, given n = 3, you'd list these five strings:
 
-((( )))                 (( )( ))             (( ))( )          ( )(( ))         ( )( )( )
+((( )))    (( )( ))    (( ))( )   ( )(( ))   ( )( )( )
 
     As a hint, given any string of n≥ 1 balanced parenthesis, focus on the first open parentheses and the close parentheses it matches.
 
@@ -73,6 +73,6 @@ Output : 11  16  12  17  13  18  14  19  15  20
 
 27. Generate Binary numbers from 1 to n using a Queue
 
-28.Sort a Queue ( Either recursion or iteration or Both)
+28.Sort a Queue (recursion)
 
 29. Generic Queue Recheck 
