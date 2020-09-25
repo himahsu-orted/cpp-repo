@@ -15,7 +15,6 @@ void mlInsert(ML START)
     END = START;
     ML L;
 
-
     int n;
     cin >> n;
     if (n == -1)
@@ -71,8 +70,8 @@ void displayMList(ML S)
     {
 
         cout << S->data << " ";
-        if(S->Lnode!=NULL)
-        displayMList(S->Lnode);
+        if (S->Lnode != NULL)
+            displayMList(S->Lnode);
 
         displayMList(S->mext);
     }
