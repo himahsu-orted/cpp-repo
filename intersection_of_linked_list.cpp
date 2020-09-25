@@ -44,6 +44,26 @@ struct node *createList()
 
     return L1;
 }
+void makeLink(LL A, LL B)
+{
+    while (A != NULL)
+    {
+        if (A->data == 6)
+        {
+            while (B != NULL)
+            {
+                if (B->next == NULL)
+                {
+                    B->next = A;
+                    return;
+                }
+                B = B->next;
+            }
+            return;
+        }
+        A = A->next;
+    }
+}
 void deleteEnd(LL C)
 {
     while (C != NULL)
@@ -56,39 +76,30 @@ void deleteEnd(LL C)
         C = C->next;
     }
 }
-void sortM(LL C)
+void findL(LL A, LL B)
 {
-    LL RUN=C,M;
-    int min=C->data,cur,temp;
-    while(C!=NULL)
+    LL PB = B;
+    LL PA = A;
+    deleteEnd(A);
+    while (A->next != NULL)
     {
-        cur=C->data;
-        min=C->data;
-        while(RUN!=NULL)
-        {
-            if(RUN->data<min)
-            {
-                min=RUN->data;
-                M=RUN;
-            }
-
-            RUN=RUN->next;
-        }
-        if(cur>min)
-        {
-            temp=C->data;
-            C->data=M->data;
-            M->data=temp;
-        }
-        C=C->next;
-        RUN=C;
-        M=C;
+        A = A->next;
     }
+    while (B->next != NULL)
+    {
+        B = B->next;
+    }
+    if (A == B)
+        findL(PA, PB);
+    else
+        cout << B->data;
 }
 int main()
 {
-    LL A;
+    LL A, B;
     A = createList();
-    sortM(A);
-    displayAll(A);
+    B = createList();
+    makeLink(A, B);
+
+    findL(A, B);
 }

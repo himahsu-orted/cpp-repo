@@ -26,8 +26,8 @@ void displayAll(LL S)
 {
     if (S != NULL)
     {
-
-        cout << S->data << " ";
+        if (S->data != 0)
+            cout << S->data << " ";
         displayAll(S->next);
     }
 }
@@ -44,51 +44,41 @@ struct node *createList()
 
     return L1;
 }
-void deleteEnd(LL C)
+static int re1(int pre, LL C)
 {
-    while (C != NULL)
-    {
-        if ((C->next->next) == NULL)
-        {
-            C->next = NULL;
-            break;
-        }
-        C = C->next;
-    }
-}
-void sortM(LL C)
-{
-    LL RUN=C,M;
-    int min=C->data,cur,temp;
-    while(C!=NULL)
-    {
-        cur=C->data;
-        min=C->data;
-        while(RUN!=NULL)
-        {
-            if(RUN->data<min)
-            {
-                min=RUN->data;
-                M=RUN;
-            }
 
-            RUN=RUN->next;
-        }
-        if(cur>min)
+    if (C != NULL)
+    {
+        int later = re1(pre, C->next);
+        if (later == 0)
+            return C->data;
+        else
         {
-            temp=C->data;
-            C->data=M->data;
-            M->data=temp;
+            return (C->data * 10 + later);
         }
-        C=C->next;
-        RUN=C;
-        M=C;
     }
+    return 0;
 }
+static int re2(int pre, LL D)
+{
+    if (D != NULL)
+    {
+        int later = re1(pre, D->next);
+        if (later == 0)
+            return D->data;
+        else
+        {
+            return (D->data * 10 + later);
+        }
+    }
+    return 0;
+}
+
 int main()
 {
-    LL A;
-    A = createList();
-    sortM(A);
-    displayAll(A);
+
+    LL C, D;
+    C = createList();
+    D = createList();
+    cout << re1(C->data, C) + re2(D->data, D);
 }

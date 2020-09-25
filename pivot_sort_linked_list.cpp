@@ -58,31 +58,31 @@ void deleteEnd(LL C)
 }
 void sortM(LL C)
 {
-    LL RUN=C,M;
-    int min=C->data,cur,temp;
-    while(C!=NULL)
+    LL RUN = C, M;
+    int min = C->data, cur, temp;
+    while (C != NULL)
     {
-        cur=C->data;
-        min=C->data;
-        while(RUN!=NULL)
+        cur = C->data;
+        min = C->data;
+        while (RUN != NULL)
         {
-            if(RUN->data<min)
+            if (RUN->data < min)
             {
-                min=RUN->data;
-                M=RUN;
+                min = RUN->data;
+                M = RUN;
             }
 
-            RUN=RUN->next;
+            RUN = RUN->next;
         }
-        if(cur>min)
+        if (cur > min)
         {
-            temp=C->data;
-            C->data=M->data;
-            M->data=temp;
+            temp = C->data;
+            C->data = M->data;
+            M->data = temp;
         }
-        C=C->next;
-        RUN=C;
-        M=C;
+        C = C->next;
+        RUN = C;
+        M = C;
     }
 }
 int main()
