@@ -1,4 +1,4 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
 using namespace std;
 
 typedef struct Dnode
@@ -7,7 +7,7 @@ typedef struct Dnode
     int data;
     struct Dnode *right;
 
-} *DL;
+} * DL;
 void insert(DL START)
 {
     DL END, CUR;
@@ -19,8 +19,8 @@ void insert(DL START)
     {
         CUR = new (struct Dnode);
         CUR->data = n;
-        CUR->right=NULL;
-        CUR->left=END;
+        CUR->right = NULL;
+        CUR->left = END;
         END->right = CUR;
         END = CUR;
 
@@ -35,8 +35,8 @@ struct Dnode *createList()
     cin >> n;
     L1 = new (struct Dnode);
     L1->data = n;
-    L1->left=NULL;
-    L1->right=NULL;
+    L1->left = NULL;
+    L1->right = NULL;
     insert(L1);
 
     return L1;
@@ -79,36 +79,36 @@ void displayRev(DL S)
         cout << S->data << " ";
     }
 }
-void addInFront(DL(&START),int n)
+void addInFront(DL(&START), int n)
 {
 
     DL CUR;
     CUR = new (struct Dnode);
     CUR->data = n;
-    CUR->left=NULL;
-    START->left=CUR;
+    CUR->left = NULL;
+    START->left = CUR;
     CUR->right = START;
     START = CUR;
 }
 void insertBefore(DL C, int n, int k)
 {
     //Insert n before k
-    if(k==C->data)
+    if (k == C->data)
     {
-        addInFront(C,n);
+        addInFront(C, n);
         return;
     }
-    while(C!=NULL)
+    while (C != NULL)
     {
-        if(C->data==k)
+        if (C->data == k)
         {
             DL ADD;
-            ADD=new (struct Dnode);
-            ADD->data=n;
-            ADD->right=C;
-            ADD->left=C->left->right;
-            C->left->right=ADD;
-            C->left=ADD;
+            ADD = new (struct Dnode);
+            ADD->data = n;
+            ADD->right = C;
+            ADD->left = C->left->right;
+            C->left->right = ADD;
+            C->left = ADD;
         }
     }
 }
@@ -116,9 +116,9 @@ void deleteEnd(DL C)
 {
     while (C != NULL)
     {
-        if(C->right==NULL)
+        if (C->right == NULL)
         {
-            C->left->right=NULL;
+            C->left->right = NULL;
             break;
         }
     }
@@ -244,43 +244,43 @@ void deleteK(DL C, int k)
     DL SP;
     SP = C;
 
-    while(C!=NULL)
+    while (C != NULL)
     {
-        if(C->data==k)
+        if (C->data == k)
         {
-            C->left->right=C->right;
-            C->right->left=C->left;
+            C->left->right = C->right;
+            C->right->left = C->left;
         }
     }
 }
 int palindrome(DL C)
 {
-    DL END=C;
+    DL END = C;
 
-    while(END->right!=NULL)
+    while (END->right != NULL)
     {
-        END=END->right;
+        END = END->right;
     }
-    while(C<END)
+    while (C < END)
     {
-        if(C->data!=END->data)
-        return 0;
+        if (C->data != END->data)
+            return 0;
 
-        C=C->right;
-        END=END->left;
+        C = C->right;
+        END = END->left;
     }
     return 1;
 }
 int main()
 {
-    #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin) ;
-    freopen("output.txt", "w", stdout) ;
-    #endif
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL) ; cout.tie(NULL) ;
+    cin.tie(NULL);
+    cout.tie(NULL);
 
     DL L;
-    L=createList();
-    
+    L = createList();
 }
