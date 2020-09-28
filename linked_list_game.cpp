@@ -6,22 +6,12 @@ typedef struct node
     int data;
     struct node *next;
 } * LL;
-
-typedef struct mlnode
-{
-    int data;
-    struct mlnode *mext;
-    struct node *Lnode;
-} * ML;
-
-void Linsert(LL START)
+void insert(LL START)
 {
     LL END, CUR;
     END = START;
     int n;
     cin >> n;
-    if (n == -1)
-        return;
     while (n > -1)
     {
         CUR = new (struct node);
@@ -41,74 +31,9 @@ struct node *createList()
     L1 = new (struct node);
     L1->data = n;
     L1->next = NULL;
-    Linsert(L1);
+    insert(L1);
 
     return L1;
-}
-void mlInsert(ML START)
-{
-    ML END, CUR;
-    END = START;
-    LL L;
-
-    int n;
-    cin >> n;
-    if(n==-1)
-    return;
-
-    if(n == 1)
-    {
-        L = createList();
-        START->Lnode = L;
-
-        cin>>n;
-    }
-
-    while (n > -2)
-    {
-        CUR = new (struct mlnode);
-        CUR->data = n;
-        CUR->mext = NULL;
-
-        cin >> n;
-        if (n == 1)
-        {
-            L = createList();
-            CUR->Lnode = L;
-
-        }
-        else if(n==0)
-        {
-            CUR->Lnode = NULL;
-        }
-        cin >> n;
-        END->mext = CUR;
-        END = CUR;
-    }
-}
-struct mlnode *Mcreate()
-{
-    int n;
-    ML M1;
-    LL L;
-
-    cin >> n;
-    M1 = new (struct mlnode);
-    M1->data = n;
-    M1->mext = NULL;
-    M1->Lnode=NULL;
-    mlInsert(M1);
-
-    return M1;
-}
-void displayMList(ML S)
-{
-    if (S != NULL)
-    {
-
-        cout << S->data << " ";
-        displayMList(S->mext);
-    }
 }
 void displayAll(LL S)
 {
@@ -117,18 +42,6 @@ void displayAll(LL S)
 
         cout << S->data << " ";
         displayAll(S->next);
-    }
-}
-void displayComb(ML S)
-{
-    if (S != NULL)
-    {
-        cout << S->data << " ";
-
-        if (S->Lnode != NULL)
-            displayAll(S->Lnode);
-
-        displayComb(S->mext);
     }
 }
 void removeFirst(LL(&S))
@@ -406,9 +319,60 @@ int palindrome(LL C)
     }
     return 1;
 }
+char game(LL L1, LL L2)
+{
+    int a = 0, b = 0;
+    bool aChance = true;
+    while (L1 != NULL)
+    {
+        if (aChance == true)
+        {
+            a = L1->data;
+            aChance = false;
+        }
+        else
+        {
+            b = b + L1->data;
+            aChance = true;
+        }
+        L1 = L1->next;
+    }
+    aChance = true;
+    while (L2 != NULL)
+    {
+        if (aChance == true)
+        {
+            a = L2->data;
+            aChance = false;
+        }
+        else
+        {
+            b = b + L2->data;
+            aChance = true;
+        }
+        L2 = L2->next;
+    }
+    if (a > b)
+        return 'A';
+    else
+        return 'B';
+}
 int main()
 {
-    ML C;
-    C = Mcreate();
-    displayComb(C);
+    LL L1, L2;
+    L1 = createList();
+    L2 = createList();
+
+    if (game(L1, L2) == 'A' && game(L2, L1) == 'A')
+    {
+        cout << "A";
+    }
+    else if (game(L1, L2) == 'B' && game(L2, L1) == 'B')
+    {
+        cout << "B";
+    }
+    else
+    {
+        cout << "D";
+    }
 }

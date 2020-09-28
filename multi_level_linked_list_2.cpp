@@ -15,39 +15,31 @@ void mlInsert(ML START)
     END = START;
     ML L;
 
-    int n;
-    cin >> n;
-    if (n == -1)
-        return;
-
-    if (n == -2)
-    {
-        L = Mcreate();
-        START->Lnode = L;
-
-        cin >> n;
-    }
-
+    int n = 0;
     while (n > -1)
     {
-        CUR = new (struct mlnode);
-        CUR->data = n;
-        CUR->mext = NULL;
-
         cin >> n;
-        if (n == -2)
+        if (n == -1)
+        {
+            return;
+        }
+        else if (n == 1)
         {
             L = Mcreate();
-            CUR->Lnode = L;
-
-            cin >> n;
+            END->Lnode = L;
+        }
+        else if (n == 0)
+        {
+            END->Lnode = NULL;
         }
         else
         {
-            CUR->Lnode = NULL;
+            CUR = new (struct mlnode);
+            CUR->data = n;
+            CUR->mext = NULL;
+            END->mext = CUR;
+            END = CUR;
         }
-        END->mext = CUR;
-        END = CUR;
     }
 }
 struct mlnode *Mcreate()
@@ -70,15 +62,56 @@ void displayMList(ML S)
     {
 
         cout << S->data << " ";
-        if (S->Lnode != NULL)
-            displayMList(S->Lnode);
-
         displayMList(S->mext);
+    }
+}
+void displayLevel(ML S)
+{
+    ML END = S;
+    while (END->mext != NULL)
+    {
+        END = END->mext;
+    }
+    while (S != NULL)
+    {
+        if (S->Lnode != NULL)
+        {
+            END->mext = S->Lnode;
+            S->Lnode = NULL;
+            while (END->mext != NULL)
+            {
+                END = END->mext;
+            }
+        }
+        S = S->mext;
+    }
+}
+void displayDepth(ML S, int A[])
+{
+    static int i = 0;
+    if (S != NULL)
+    {
+
+        A[i++] = S->data;
+        if (S->Lnode != NULL)
+            displayDepth(S->Lnode, A);
+
+        displayDepth(S->mext, A);
     }
 }
 int main()
 {
     ML C;
     C = Mcreate();
+    int arr[200];
+    for (int i = 0; i < 200; i++)
+        arr[i] = -1;
+    displayDepth(C, arr);
+
+    displayLevel(C);
     displayMList(C);
+
+    for (int i = 0; i < 200; i++)
+        if (arr[i] != -1)
+            cout << arr[i] << " ";
 }

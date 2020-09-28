@@ -5,110 +5,75 @@ typedef struct node
 {
     int data;
     struct node *next;
+    struct node *random;
 } * LL;
-
-typedef struct mlnode
+void removeFirst(LL(&S));
+void randomConnector(LL S, int A[])
 {
-    int data;
-    struct mlnode *mext;
-    struct node *Lnode;
-} * ML;
-
-void Linsert(LL START)
-{
-    LL END, CUR;
-    END = START;
-    int n;
-    cin >> n;
-    if (n == -1)
-        return;
-    while (n > -1)
+    LL T = S;
+    int i = 0;
+    while (S != NULL)
     {
-        CUR = new (struct node);
-        CUR->data = n;
-        CUR->next = NULL;
-        END->next = CUR;
-        END = CUR;
-        cin >> n;
+        if (A[i] != 0)
+        {
+            while (T != NULL)
+            {
+                if (A[i] == T->data)
+                {
+                    S->random = T;
+                    break;
+                }
+                T = T->next;
+            }
+        }
+        i++;
+        T = S;
+        S = S->next;
     }
+}
+int randomCounter(LL S)
+{
+    int i = 0;
+    while (S != NULL)
+    {
+        if (S->random != NULL)
+            i++;
+
+        S = S->next;
+    }
+    return i;
 }
 struct node *createList()
 {
-    int n;
-    LL L1;
+    int A[20], i;
+    for (i = 0; i < 20; i++)
+    {
+        A[i] = 0;
+    }
 
-    cin >> n;
-    L1 = new (struct node);
-    L1->data = n;
-    L1->next = NULL;
-    Linsert(L1);
+    LL START;
+    START = new (struct node);
 
-    return L1;
-}
-void mlInsert(ML START)
-{
-    ML END, CUR;
+    LL END, CUR;
     END = START;
-    LL L;
-
-    int n;
-    cin >> n;
-    if(n==-1)
-    return;
-
-    if(n == 1)
+    CUR = START;
+    int n, k = 1;
+    i = 0;
+    while (k > 0)
     {
-        L = createList();
-        START->Lnode = L;
-
-        cin>>n;
-    }
-
-    while (n > -2)
-    {
-        CUR = new (struct mlnode);
+        cin >> n;
         CUR->data = n;
-        CUR->mext = NULL;
-
-        cin >> n;
-        if (n == 1)
-        {
-            L = createList();
-            CUR->Lnode = L;
-
-        }
-        else if(n==0)
-        {
-            CUR->Lnode = NULL;
-        }
-        cin >> n;
-        END->mext = CUR;
+        CUR->next = NULL;
+        CUR->random = NULL;
+        END->next = CUR;
         END = CUR;
+        CUR = new (struct node);
+        cin >> k;
+        cin >> n;
+        A[i++] = n;
     }
-}
-struct mlnode *Mcreate()
-{
-    int n;
-    ML M1;
-    LL L;
-
-    cin >> n;
-    M1 = new (struct mlnode);
-    M1->data = n;
-    M1->mext = NULL;
-    M1->Lnode=NULL;
-    mlInsert(M1);
-
-    return M1;
-}
-void displayMList(ML S)
-{
-    if (S != NULL)
-    {
-
-        cout << S->data << " ";
-        displayMList(S->mext);
-    }
+    randomConnector(START, A);
+    return START;
 }
 void displayAll(LL S)
 {
@@ -119,16 +84,57 @@ void displayAll(LL S)
         displayAll(S->next);
     }
 }
-void displayComb(ML S)
+void randomDisplay(LL PER, LL S)
 {
-    if (S != NULL)
+    LL STORE = PER;
+    LL TEMP = PER;
+    while (PER != NULL)
     {
-        cout << S->data << " ";
+        cout << PER->data << " ";
+        if (PER == S)
+        {
+            PER = S->random;
+            cout << PER->data << " ";
+        }
+        if (PER->random != NULL)
+        {
+            TEMP = PER;
+        }
+        PER = PER->next;
+    }
 
-        if (S->Lnode != NULL)
-            displayAll(S->Lnode);
+    cout << endl;
 
-        displayComb(S->mext);
+    PER = STORE;
+    if (TEMP < S)
+        return;
+    while (PER != NULL)
+    {
+        cout << PER->data << " ";
+        if (PER == S)
+        {
+            PER = S->random;
+            cout << PER->data << " ";
+        }
+        if (PER == TEMP)
+        {
+            PER = TEMP->random;
+            cout << PER->data << " ";
+        }
+        PER = PER->next;
+    }
+}
+void dis(LL S)
+{
+    LL PER = S;
+    while (S != NULL)
+    {
+        if (S->random != NULL)
+        {
+            randomDisplay(PER, S);
+            cout << endl;
+        }
+        S = S->next;
     }
 }
 void removeFirst(LL(&S))
@@ -408,7 +414,17 @@ int palindrome(LL C)
 }
 int main()
 {
-    ML C;
-    C = Mcreate();
-    displayComb(C);
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    LL C;
+    C = createList();
+    displayAll(C);
+    cout << endl;
+    dis(C);
 }
