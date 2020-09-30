@@ -37,3 +37,6 @@ X[] = { 1, 2, 3, 4, 7 } Y[] = { 8, 9, 10 }
 26. Combination of Sum
 
 28.Sort a Queue (recursion), better method
+
+
+

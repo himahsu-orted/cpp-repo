@@ -119,8 +119,11 @@ void findTriplet(DL L, int n)
         {
             if (fVal * 2 + MP->data + LP->data == n)
             {
-                cout << fVal << MP->data << LP->data;
-                cout << endl;
+                if(fVal!=MP->data&& MP->data!=LP->data && fVal!=LP->data)
+                {
+                    cout << fVal << " " << MP->data << " " << LP->data;
+                    cout << endl;
+                }
                 MP = MP->right;
                 LP = LP->left;
             }
