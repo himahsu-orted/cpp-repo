@@ -90,6 +90,26 @@ void addInFront(DL(&START), int n)
     CUR->right = START;
     START = CUR;
 }
+void insertAfter(DL C, int n, int k)
+{
+    while (C->right != NULL)
+    {
+        if (C->data == k)
+        {
+            if (C->right == NULL)
+            {
+                addInEnd(C, n);
+                return;
+            }
+            DL ADD = new (struct Dnode);
+            ADD->data = n;
+            ADD->right = C->right;
+            ADD->left = C;
+            C->right->left = ADD;
+            C->right = ADD;
+        }
+    }
+}
 void insertBefore(DL C, int n, int k)
 {
     //Insert n before k
@@ -122,6 +142,19 @@ void deleteEnd(DL C)
             break;
         }
     }
+}
+void addInEnd(DL C, int n)
+{
+    while (C->right != NULL)
+    {
+        C = C->right;
+    }
+
+    DL ADD = new (struct Dnode);
+    ADD->data = n;
+    ADD->right = NULL;
+    ADD->left = C;
+    C->right = ADD;
 }
 int findMin(DL C)
 {
@@ -195,49 +228,52 @@ int numberOfEvens(DL C)
     }
     return count;
 }
-struct Dnode *insSort(DL C)
+void swapDL(DL l,DL h)
 {
-    DL R = new (struct Dnode);
-    DL END, CUR, TEMP;
-    END = R;
-    CUR = R;
+    int temp=l->data;
+    l->data=h->data;
+    h->data=temp;
+}
+struct Dnode *breakDL(DL l, DL h)
+{
+    int pivot = h->data;
+    DL pos = l->left;
 
-    R->data = C->data;
-    R->right = NULL;
-
-    C = C->right;
-    while (C != NULL)
+    for (DL i = l; i != h; i = i->right)
     {
-        if (C->data >= END->data)
+        if (i->data <= pivot)
         {
-            CUR = new (struct Dnode);
-            CUR->data = C->data;
-            END->right = CUR;
-            END = CUR;
-        }
-        else
-        {
-            TEMP = R;
-            if (C->data < R->data)
-            {
-                addInFront(R, C->data);
-            }
+            if (pos == NULL)
+                pos = l;
             else
-            {
-                while (TEMP != NULL)
-                {
-                    if (TEMP->data > C->data)
-                    {
-                        insertBefore(R, TEMP->data, C->data);
-                        break;
-                    }
-                    TEMP = TEMP->right;
-                }
-            }
+                pos = pos->right;
+            swapDL(i, pos);
         }
-        C = C->right;
     }
-    return R;
+    if (pos == NULL)
+        pos = l;
+    else
+        pos = pos->right;
+    swapDL(pos, h);
+    return pos;
+}
+void quickSort(DL low, DL high)
+{
+    DL pos;
+    if (low != NULL && high != NULL && low != high->right)
+    {
+        pos = breakDL(low, high);
+        quickSort(low, pos->left);
+        quickSort(pos->right, high);
+    }
+}
+void quickSortController(DL L)
+{
+    DL PER = L;
+    while (L->right != NULL)
+        L = L->right;
+
+    quickSort(PER, L);
 }
 void deleteK(DL C, int k)
 {
@@ -273,6 +309,7 @@ int palindrome(DL C)
 }
 int main()
 {
+
 #ifndef ONLINE_JUDGE
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
@@ -283,4 +320,58 @@ int main()
 
     DL L;
     L = createList();
+
+    cout << endl;
+    displayAll(L);
+
+    int n;
+    int k;
+
+    // cin >> n;
+    // addInFront(L, n);
+
+    // cout << endl;
+    // displayAll(L);
+
+    // cin >> n;
+    // addInEnd(L, n);
+
+    // cout << endl;
+    // displayAll(L);
+
+    // cin >> k;
+    // cin >> n;
+    // insertBefore(L, n, k);
+
+    // cout << endl;
+    // displayAll(L);
+
+    // cin >> k;
+    // cin >> n;
+    // insertAfter(L, n, k);
+
+    // cout << endl;
+    // displayAll(L);
+
+    removeFirst(L);
+
+    cout << endl;
+    displayAll(L);
+
+    // deleteEnd(L);
+
+    // cout<<endl;
+    // displayAll(L);
+
+    // cin>>n;
+    // deleteK(L,n);
+
+    // cout<<endl;
+    // displayAll(L);
+
+    // DL S;
+    // S=insSort(L);
+
+    // cout<<endl;
+    // displayAll(L);
 }

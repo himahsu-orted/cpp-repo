@@ -23,7 +23,6 @@ void insert(DL START)
         CUR->left = END;
         END->right = CUR;
         END = CUR;
-
         cin >> n;
     }
 }
@@ -52,9 +51,9 @@ void displayAll(DL S)
 }
 void swapDL(DL l, DL h)
 {
-    int temp = l->data;
+    int n = l->data;
     l->data = h->data;
-    h->data = temp;
+    h->data = n;
 }
 struct Dnode *breakDL(DL l, DL h)
 {
@@ -97,61 +96,13 @@ void quickSortController(DL L)
 
     quickSort(PER, L);
 }
-void findTriplet(DL L, int n)
-{
-
-    DL i = L;
-    DL END=L;
-    while(END!=NULL)
-    {
-        if(END->right==NULL)
-        break;
-
-        END=END->right;
-    }
-    while (i!= NULL)
-    {
-        int fVal=i->data;
-        DL MP = L;
-        DL LP = END;
-
-        while(MP<LP)
-        {
-            if(fVal*2+MP->data+LP->data==n)
-            {
-                cout<<fVal<<MP->data<<LP->data;
-                cout<<endl;
-                MP=MP->right;
-                LP=LP->left;
-            }
-            else if(fVal*2+MP->data+LP->data<n)
-            {
-                MP=MP->right;
-            }
-            else if(fVal*2+MP->data+LP->data>n)
-            {
-                LP=LP->left;
-            }
-        }
-        i=i->right;
-        if(i->right==NULL)
-        break;
-    }
-}
 int main()
 {
 
-#ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-#endif
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
     DL L;
     L = createList();
+
     quickSortController(L);
-    findTriplet(L,19);
-    //displayAll(L);
+    cout << endl;
+    displayAll(L);
 }

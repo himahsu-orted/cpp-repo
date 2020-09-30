@@ -1,26 +1,12 @@
-2 1 12 1 14 0 -1 16 1 18 0 -1 -1 4 0 6 0 8 1 20 1 26 1 32 0 -1 28 0 30 0 -1 22 0 24 0 -1 10 0 -1
-
-2. Permutation problem
-4. Bucket sort
+1. Permutation problem
+2. Bucket sort
 5. Radix Bucket sort
 6.Deques Input Restricted Output Restricted
-7.positive Affects Negative Implement Deque for
-    push(10)
-    push(5)
-    enq(6)
-    enq(7)
-    push(3)
-    pop
-    Deq
-    enq(9)
-8. Dequeue
-    N 17 I T 9 C 20 S 21 E 
+7.positive Affects Negative Implement 
+
+    
 9. Knight Reach
-10.Loop in Linked List
-11.l1 U l2
-12. l1 intersection l2
-13.Recursive function - single function for min, max, average of an Array
-14. Recursive Selection sort , Bubble sort
+
 15.Given a nonnegative integer n, write a function that lists all strings formed from exactly       n     pairs of balanced parentheses. For example, given n = 3, you'd list these five strings:
 
 ((( )))    (( )( ))    (( ))( )   ( )(( ))   ( )( )( )
@@ -50,8 +36,4 @@ X[] = { 1, 2, 3, 4, 7 } Y[] = { 8, 9, 10 }
 
 26. Combination of Sum
 
-27. Generate Binary numbers from 1 to n using a Queue
-
-28.Sort a Queue (recursion)
-
-29. Generic Queue Recheck 
+28.Sort a Queue (recursion), better method

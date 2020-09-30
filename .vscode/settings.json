@@ -25,6 +25,9 @@
         "unordered_set": "cpp",
         "utility": "cpp",
         "valarray": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "ios": "cpp",
+        "ostream": "cpp",
+        "istream": "cpp"
     }
 }

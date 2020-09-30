@@ -101,41 +101,41 @@ void findTriplet(DL L, int n)
 {
 
     DL i = L;
-    DL END=L;
-    while(END!=NULL)
+    DL END = L;
+    while (END != NULL)
     {
-        if(END->right==NULL)
-        break;
+        if (END->right == NULL)
+            break;
 
-        END=END->right;
+        END = END->right;
     }
-    while (i!= NULL)
+    while (i != NULL)
     {
-        int fVal=i->data;
+        int fVal = i->data;
         DL MP = L;
         DL LP = END;
 
-        while(MP<LP)
+        while (MP < LP)
         {
-            if(fVal*2+MP->data+LP->data==n)
+            if (fVal * 2 + MP->data + LP->data == n)
             {
-                cout<<fVal<<MP->data<<LP->data;
-                cout<<endl;
-                MP=MP->right;
-                LP=LP->left;
+                cout << fVal << MP->data << LP->data;
+                cout << endl;
+                MP = MP->right;
+                LP = LP->left;
             }
-            else if(fVal*2+MP->data+LP->data<n)
+            else if (fVal * 2 + MP->data + LP->data < n)
             {
-                MP=MP->right;
+                MP = MP->right;
             }
-            else if(fVal*2+MP->data+LP->data>n)
+            else if (fVal * 2 + MP->data + LP->data > n)
             {
-                LP=LP->left;
+                LP = LP->left;
             }
         }
-        i=i->right;
-        if(i->right==NULL)
-        break;
+        i = i->right;
+        if (i->right == NULL)
+            break;
     }
 }
 int main()
@@ -152,6 +152,5 @@ int main()
     DL L;
     L = createList();
     quickSortController(L);
-    findTriplet(L,19);
-    //displayAll(L);
+    findTriplet(L, 19);
 }
