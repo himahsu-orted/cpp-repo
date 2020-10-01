@@ -1,7 +1,7 @@
 1. Permutation problem
 2. Bucket sort
 5. Radix Bucket sort
-6.Deques Input Restricted Output Restricted
+
 7.positive Affects Negative Implement 
 
     
@@ -38,5 +38,9 @@ X[] = { 1, 2, 3, 4, 7 } Y[] = { 8, 9, 10 }
 
 28.Sort a Queue (recursion), better method
 
+CCC-T4-24-9-2020
 
+Multi level sorted sort using stack Queue Dedquque
+
+MLL radix sort
 

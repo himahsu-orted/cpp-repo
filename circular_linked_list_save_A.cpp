@@ -80,7 +80,7 @@ void oneRound(LL START, int total, int k)
     {
         if (count % k == 0 && START->data != -1)
         {
-            if (i >= total/2)
+            if (i >= total / 2)
                 arr[j++] = START->data;
             START->data = -1;
             i++;
@@ -111,17 +111,17 @@ void oneRound(LL START, int total, int k)
 void controller(LL S, int total, int k)
 {
 
-    oneRound(S, total,k);
+    oneRound(S, total, k);
 }
 int main()
 {
-    #ifndef ONLINE_JUDGE
-        freopen("input.txt", "r", stdin);
-        freopen("output.txt", "w", stdout);
-    #endif
-        ios_base::sync_with_stdio(false);
-        cin.tie(NULL);
-        cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 
     LL C;
     int n;
