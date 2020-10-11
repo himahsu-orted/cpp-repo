@@ -49,6 +49,34 @@ int height(BST T)
             return (rheight + 1);
     }
 }
+void findMax(BST T, BST &(max))
+{
+    if (T != NULL)
+    {
+
+        if (T->data > max->data)
+        {
+            max = T;
+        }
+        
+        findMax(T->lChild, max);
+        findMax(T->rChild, max);
+    }
+}
+void findMin(BST T, BST &(min))
+{
+    if (T != NULL)
+    {
+
+        
+        if (T->data < min->data)
+        {
+            min = T;
+        }
+        findMin(T->lChild, min);
+        findMin(T->rChild, min);
+    }
+}
 void levelOrder(BST T, int pos, int a[])
 {
 
@@ -65,62 +93,15 @@ void levelOrder(BST T, int pos, int a[])
         levelOrder(T->rChild, pos - 1, a);
     }
 }
-void AscDsc(BST T)
+void displayTree(BST T)
 {
-    int depth = height(T);
-    int a[100];
-    int i;
-
-    for (i = 0; i < 100; i++)
+    if (T != NULL)
     {
-        a[i] = -2;
+
+        displayTree(T->lChild);
+        cout << T->data << " ";
+        displayTree(T->rChild);
     }
-    for (i = 1; i < depth + 1; i++)
-    {
-        levelOrder(T, i, a);
-        a[array_i++] = -1;
-    }
-    vector<int> temp;
-    int j = 0;
-
-    int max=0;
-    int min=0;
-    int asc=0;
-    int dsc=0;
-    int uno=0;
-
-    for (i = 0; i < 100; i++)
-    {
-        if (a[i] != -2)
-        {
-            if(a[i]!=-1)
-            temp.push_back(a[i]);
-            else 
-            {
-                int c=0;
-                for(int k=0;k<temp.size()-1;k++)
-                {
-                    if(min<temp[k])
-                    min=temp[k];
-
-                    if(max>temp[k])
-                    max=temp[k];
-
-                    if(temp[k]<temp[k+1])
-                    c++;
-                }
-                if(c==temp.size()-1)
-                asc=++j;
-                if(c==0)
-                dsc=++j;
-                else 
-                uno=++j;
-
-                temp.clear();
-            }
-        }
-    }
-    cout<<max<<endl<<min<<endl<<asc<<endl<<dsc<<endl<<uno;
 }
 int main()
 {
@@ -139,6 +120,21 @@ int main()
     createTree(T);
 
     
+    BST left=T;
+    BST right=T;
 
-    AscDsc(T);
+    findMax(T->lChild,left);
+    findMin(T->rChild,right);
+
+    
+    int temp;
+    if(left->data>right->data)
+    {
+        temp=right->data;
+        right->data=left->data;
+        left->data=temp;
+    }
+
+    displayTree(T);
+
 }

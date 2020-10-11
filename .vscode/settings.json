@@ -28,6 +28,10 @@
         "algorithm": "cpp",
         "ios": "cpp",
         "ostream": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "iosfwd": "cpp",
+        "iterator": "cpp",
+        "functional": "cpp",
+        "*.tcc": "cpp"
     }
 }
