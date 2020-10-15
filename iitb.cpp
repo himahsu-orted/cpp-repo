@@ -1,26 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int fac(int n)
+void reFunc(string p, string q, int pos, string &r)
 {
-    if(n==0)
-    return 1;
-    else
+    if (pos > -1)
     {
-        return(fac(n-1)*n);
-    }
-}
-void reFunc(int num)
-{
-    if (num > -1)
-    {
-        reFunc(num-1);
-        for(int i=0;i<=num;i++)
-        {
-            int val=fac(num)/(fac(i)*fac(num-i));
-            cout<<val<<" ";
-        }
-        cout<<endl;
+        reFunc(p, q, pos - 1, r);
+        r += p[pos];
+        r += q[pos];
     }
 }
 int main()
@@ -33,8 +20,8 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int n;
-
-    cin >> n;
-    reFunc(n);
+    string p, q, r = "";
+    cin >> p >> q;
+    reFunc(p, q, p.size() - 1, r);
+    cout << r;
 }

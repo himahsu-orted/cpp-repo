@@ -49,53 +49,48 @@ int height(BST T)
             return (rheight + 1);
     }
 }
-static int array_i = 0;
-static int array_j = 0;
-void levelOrder(BST T, int pos, int arr[][6])
+static int i = 0;
+vector<int> store;
+static int maxBent = 1;
+bool onePath(BST T, vector<int> arr, bool status)
 {
 
-    if (T == NULL)
-        return;
-
-    if (pos == 1)
-    {
-        arr[array_j][array_i++] = T->data;
-    }
-    else if (pos > 1)
-    {
-        levelOrder(T->lChild, pos - 1, arr);
-        levelOrder(T->rChild, pos - 1, arr);
-    }
-}
-void left(BST T)
-{
     if (T != NULL)
     {
-         if (T->lChild != NULL || T->rChild != NULL)
-            cout << T->data << " ";
 
-        left(T->lChild);
-    }
-}
-void right(BST T)
-{
-    if (T != NULL)
-    {
-        right(T->rChild);
-
-         if (T->lChild != NULL || T->rChild != NULL)
-            cout << T->data << " ";
-    }
-}
-void bottom(BST T)
-{
-    if (T != NULL)
-    {
+        arr.push_back(T->data);
         if (T->lChild == NULL && T->rChild == NULL)
-            cout << T->data << " ";
+        {
+            if (i >= maxBent)
+            {
+                maxBent = i;
 
-        bottom(T->lChild);
-        bottom(T->rChild);
+                if (i > maxBent)
+                    store.clear();
+                else
+                    store.push_back(-1);
+
+                for (int i = 0; i < arr.size(); i++)
+                {
+                    store.push_back(arr[i]);
+                }
+            }
+            i = 0;
+        }
+        if (onePath(T->lChild, arr, true) != status)
+            i++;
+        onePath(T->rChild, arr, false);
+    }
+    return !status;
+}
+void display(BST T)
+{
+    if (T != NULL)
+    {
+        cout << T->data << " ";
+
+        display(T->lChild);
+        display(T->rChild);
     }
 }
 int main()
@@ -109,12 +104,16 @@ int main()
     cout.tie(NULL);
 
     BST T = NULL;
-    int i, j;
     createTree(T);
 
-    left(T);
-    // cout<<endl;
-    bottom(T);
-    // cout<<endl;
-    right(T);
+    vector<int> arr;
+    onePath(T, arr, true);
+
+    for (int i = 0; i < store.size(); i++)
+    {
+        if (store[i] != -1)
+            cout << store[i] << " ";
+        else if (i != 0)
+            cout << endl;
+    }
 }

@@ -2,9 +2,10 @@
 #include <vector>
 #include <forward_list>
 using namespace std;
+#include <bits/stdc++.h>
+using namespace std;
 
-static int array_i = 0;
-
+const int SIZE = 100;
 typedef struct node
 {
     int data;
@@ -32,7 +33,6 @@ void createTree(BST &(T))
     createTree(T->lChild);
     createTree(T->rChild);
 }
-
 int height(BST T)
 {
 
@@ -49,78 +49,49 @@ int height(BST T)
             return (rheight + 1);
     }
 }
-void levelOrder(BST T, int pos, int a[])
+static int i = 0;
+vector<int> store;
+static int maxBent = 1;
+bool onePath(BST T, vector<int> arr, bool status)
 {
 
-    if (T == NULL)
-        return;
+    if (T != NULL)
+    {
 
-    if (pos == 1)
-    {
-        a[array_i++] = T->data;
-    }
-    else if (pos > 1)
-    {
-        levelOrder(T->lChild, pos - 1, a);
-        levelOrder(T->rChild, pos - 1, a);
-    }
-}
-void AscDsc(BST T)
-{
-    int depth = height(T);
-    int a[100];
-    int i;
-
-    for (i = 0; i < 100; i++)
-    {
-        a[i] = -2;
-    }
-    for (i = 1; i < depth + 1; i++)
-    {
-        levelOrder(T, i, a);
-        a[array_i++] = -1;
-    }
-    vector<int> temp;
-    int j = 0;
-
-    int max=0;
-    int min=0;
-    int asc=0;
-    int dsc=0;
-    int uno=0;
-
-    for (i = 0; i < 100; i++)
-    {
-        if (a[i] != -2)
+        arr.push_back(T->data);
+        if (T->lChild == NULL && T->rChild == NULL)
         {
-            if(a[i]!=-1)
-            temp.push_back(a[i]);
-            else 
+            if (i >= maxBent)
             {
-                int c=0;
-                for(int k=0;k<temp.size()-1;k++)
+                maxBent = i;
+
+                if (i > maxBent)
+                    store.clear();
+                else
+                    store.push_back(-1);
+
+                for (int i = 0; i < arr.size(); i++)
                 {
-                    if(min<temp[k])
-                    min=temp[k];
-
-                    if(max>temp[k])
-                    max=temp[k];
-
-                    if(temp[k]<temp[k+1])
-                    c++;
+                    store.push_back(arr[i]);
                 }
-                if(c==temp.size()-1)
-                asc=++j;
-                if(c==0)
-                dsc=++j;
-                else 
-                uno=++j;
-
-                temp.clear();
             }
+            i = 0;
         }
+        if (onePath(T->lChild, arr, true) != status)
+            i++;
+        onePath(T->rChild, arr, false);
     }
-    cout<<max<<endl<<min<<endl<<asc<<endl<<dsc<<endl<<uno;
+    return !status;
+}
+void display(BST T)
+{
+    if (T != NULL)
+    {
+        cout << T->data << " ";
+
+        display(T->lChild);
+        display(T->rChild);
+    }
 }
 int main()
 {
@@ -133,12 +104,16 @@ int main()
     cout.tie(NULL);
 
     BST T = NULL;
-    int n;
-    vector<int> arr;
-
     createTree(T);
 
-    
+    vector<int> arr;
+    onePath(T, arr, true);
 
-    AscDsc(T);
+    for (int i = 0; i < store.size(); i++)
+    {
+        if (store[i] != -1)
+            cout << store[i] << " ";
+        else if(i!=0)
+            cout << endl;
+    }
 }
