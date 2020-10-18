@@ -38,9 +38,15 @@ X[] = { 1, 2, 3, 4, 7 } Y[] = { 8, 9, 10 }
 
 28.Sort a Queue (recursion), better method
 
-CCC-T4-24-9-2020
+29.CCC-T4-24-9-2020
 
-Multi level sorted sort using stack Queue Dedquque
+30.Multi level sorted sort using stack Queue Dedquque
 
-MLL radix sort
+31.MLL radix sort
+
+32.BST-Two to Third Sum
+
+33.Lab-10-10-2020 - BST in BT
+
+34.k1+k2=34
 

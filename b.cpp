@@ -1,102 +1,53 @@
-#include <bits/stdc++.h>
-#include <vector>
-#include <forward_list>
+#include<bits/stdc++.h>
 using namespace std;
 
 typedef struct node
 {
-    char data;
+    int data;
     struct node *lChild;
     struct node *rChild;
-} * BST;
-void createTree(BST &(T))
+
+} *BST;
+void createTree(BST & (T))
 {
-    queue<char> list;
-    queue<BST> q;
-    char ch;
-    cin >> ch;
-    while (ch != '$')
-    {
-        list.push(ch);
-        cin >> ch;
-    }
+    int n;
+    cin >> n;
 
-    BST center = new (struct node);
-    center->data = list.front();
-    center->lChild = NULL;
-    center->rChild = NULL;
-    list.pop();
-    q.push(center);
-
-    while (!list.empty())
-    {
-        BST left, right;
-
-        if (list.front() != '#')
-        {
-            left = new (struct node);
-            left->data = list.front();
-            q.front()->lChild = left;
-            q.push(left);
-        }
-        list.pop();
-
-        if (list.front() != '#')
-        {
-            right = new (struct node);
-            right->data = list.front();
-            q.front()->rChild = right;
-            q.push(right);
-        }
-        list.pop();
-
-        q.pop();
-    }
-    T = center;
-}
-int height(BST T)
-{
+    if (n == 0)
+        return;
 
     if (T == NULL)
-        return 0;
+    {
+        BST ADD;
+        ADD = new (struct node);
+        ADD->data = n;
+        ADD->lChild = NULL;
+        ADD->rChild = NULL;
+        T = ADD;
+    }
+    createTree(T->lChild);
+    createTree(T->rChild);
+}
+void createBST(BST & (T), int num)
+{
+    if (T == NULL)
+    {
+        BST add;
+        add = new(struct node);
+        add->data = num;
+        add->lChild = NULL;
+        add->rChild = NULL;
+        T = add;
+    }
     else
     {
-        int lheight = height(T->lChild);
-        int rheight = height(T->rChild);
-
-        if (lheight > rheight)
-            return (lheight + 1);
+        if (num > T->data)
+            createBST(T->rChild, num);
         else
-            return (rheight + 1);
+            createBST(T->lChild, num);
     }
-}
-void levelOrder(BST T, queue<BST> q)
-{
-    queue<BST> q2;
-    if (T != NULL)
-    {
-        while (!q.empty())
-        {
-            cout << q.front()->data << " ";
 
-            if (q.front()->lChild != NULL)
-                q2.push(q.front()->lChild);
 
-            if (q.front()->rChild != NULL)
-                q2.push(q.front()->rChild);
-
-            q.pop();
-            if (q.empty())
-            {
-                cout << endl;
-                while (!q2.empty())
-                {
-                    q.push(q2.front());
-                    q2.pop();
-                }
-            }
-        }
-    }
 }
 void display(BST T)
 {
@@ -106,6 +57,32 @@ void display(BST T)
 
         display(T->lChild);
         display(T->rChild);
+    }
+}
+
+vector<int> arr;
+void findDeadEnd(BST T)
+{
+    int min = INT_MIN;
+    int max = INT_MAX;
+    if (T != NULL)
+    {
+        if (!(T->data >= min && T->data <= max))
+        {
+            cout << min << " " << max << endl;
+
+            arr.push_back(T->data);
+        }
+        // if (min == max)
+        //  cout << "Dead End= " << T->data << endl;
+
+
+        max = T->data - 1;
+        findDeadEnd(T->lChild);
+
+        min = T->data + 1;
+        findDeadEnd(T->rChild);
+
     }
 }
 int main()
@@ -119,11 +96,27 @@ int main()
     cout.tie(NULL);
 
     BST T = NULL;
-    createTree(T);
 
-    // display(T);
+    int n;
+    cin >> n;
 
-    queue<BST> q;
-    q.push(T);
-    levelOrder(T, q);
+    while (n > -1)
+    {
+        createBST(T, n);
+        cin >> n;
+    }
+
+    findDeadEnd(T);
+    if (arr.size() > 0)
+    {
+        cout << "The given BT is not a BST and it violates the tree at:\n";
+        for (int i = 0; i < arr.size(); i++)
+        {
+            cout << arr[i] << " ";
+        }
+    }
+    else
+        cout << "The given BT is a BST\n";
+
+
 }
