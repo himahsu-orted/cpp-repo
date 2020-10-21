@@ -106,6 +106,9 @@ int main()
 		cin >> n;
 	}
 
+	T->lChild->data = 7;
+	T->rChild->data = 2;
+
 	findDeadEnd(T, INT_MIN, INT_MAX);
 	if (invalidNode.size() > 0)
 	{
