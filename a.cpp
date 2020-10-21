@@ -96,7 +96,7 @@ int main()
 	level(T, q);
 
 	for (int i = 0; i < leftView.size(); i++)
-		cout << leftView[i] <<
+		cout << leftView[i] <<" ";
 		     cout << endl;
 	for (int i = 0; i < leftView.size(); i++)
 		cout << rightView[i] << " ";
