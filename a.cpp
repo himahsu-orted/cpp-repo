@@ -1,81 +1,45 @@
 #include <bits/stdc++.h>
 #include <vector>
-#include <forward_list>
 using namespace std;
 
 typedef struct node
 {
-	int data;
+	int freq;
+	string letter;
 	struct node *lChild;
 	struct node *rChild;
 } * BST;
 
-void createTree(BST & (T))
+void makeHeap(vector<int> &arr)
 {
-	int n;
-	cin >> n;
-
-	if (n == 0)
-		return;
-
-	if (T == NULL)
+	int i, j;
+	for (int i = 1; i < arr.size(); i++)
 	{
-		BST add;
-		add = new (struct node);
-		add->data = n;
-		add->lChild = NULL;
-		add->rChild = NULL;
-		T = add;
-	}
+		j = i;
+		int x = arr[j];
+		while (j > 0 && arr[j / 2] < x)
+		{
+			arr[j] = arr[j / 2];
+			j = j / 2;
+		}
 
-	createTree(T->lChild);
-	createTree(T->rChild);
-}
-void display(BST T)
-{
-	if (T != NULL)
-	{
-		cout << T->data << " ";
-
-		display(T->lChild);
-		display(T->rChild);
+		arr[j] = x;
 	}
 }
-vector<int> leftView;
-vector<int> rightView;
-vector<int> topView;
-vector<int> bottomView;
-
-
-void level(BST T, queue<BST> q)
+vector<int> maxHeapSort(vector<int> arr)
 {
-	queue<BST> q2;
-	while (!q.empty())
+	vector<int> sortedArray;
+
+	while (arr.size() > 0)
 	{
-
-		if (q.front()->lChild)
-			q2.push(q.front()->lChild);
-		if (q.front()->rChild)
-			q2.push(q.front()->rChild);
-
-		rightView.push_back(q.front()->data);
-		q.pop();
-
-		if (!q.empty())
-		{
-			rightView.pop_back();
-		}
-		if (q.empty())
-		{
-			while (q2.front() != NULL)
-			{
-				q.push(q2.front());
-				q2.pop();
-			}
-			if (!q.empty())
-				leftView.push_back(q.front()->data);
-		}
+		sortedArray.push_back(arr[0]);
+		auto it = arr.end() - 1;
+		arr[0] = *it;
+		arr.erase(it);
+		makeHeap(arr);
 	}
+
+	return sortedArray;
 }
 int main()
 {
@@ -87,20 +51,30 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	BST T = NULL;
-	createTree(T);
+	vector<int> arr;
+	int n;
 
-	queue<BST> q;
-	q.push(T);
-	leftView.push_back(T->data);
-	level(T, q);
+	cin >> n;
+	while (n != 0)
+	{
+		arr.push_back(n);
+		cin >> n;
+	}
 
-	for (int i = 0; i < leftView.size(); i++)
-		cout << leftView[i] <<" ";
-		     cout << endl;
-	for (int i = 0; i < leftView.size(); i++)
-		cout << rightView[i] << " ";
+	makeHeap(arr);
 
+	for (int i = 0; i < arr.size(); i++)
+		cout << arr[i] << " ";
 
-	//This is the comment that i added.
+	cout << endl;
+
+	vector<int> maxHeapSortedArray = maxHeapSort(arr);
+
+	for (int i = 0; i < maxHeapSortedArray.size(); i++)
+		cout << maxHeapSortedArray[i] << " ";
+
+	cout << endl;
+
+	for (int i = 0; i < arr.size(); i++)
+		cout << arr[i] << " ";
 }

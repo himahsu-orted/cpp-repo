@@ -1,0 +1,31 @@
+This document contains the details related to the Bubble project. This is the overview of the Machine Learing demands of the project. All the members with the access of this document have to mandatorily maintain confidentiality of this document.
+
+Project overview:
+The application is basically a attendance management system, social feed, resource listing and custom marketplace.
+
+The application has 2 interfaces out of which one is used by the teacher to mark the attendance and the student end interface displays all the information about the attendance in real time. 
+
+The social feed features rich content for the students regarding all the happenings from the college and driven by machine learning algorithms, render to the users. The feed will include the official notices as well as the posts published by different clubs and societies. This is to make the information delivery more accurate and accountable.
+
+The resource listing will enlist all the study materials and links to all the possible courses and year. This is basically to be put by the teaching staffs.
+
+Custom marketplace will be a place happening very first time in NITW and would be similar to OLX but dedicatedly made for NITW. This will be the place where any student can post adds for selling their goods. Similarly it will also service the opportunity to buy things. There will be no financial transactions involved from our side and all the deals are to be made in personal between the customer and buyer. At the same instance the desired students can put renting option to the goods and in the same manner the other body can access the goods by borrowing those. This will be one of the most important and highlighted system for aspects such as book asd bycycle.
+
+Machine Learning Demands:
+1. Generate alerts for drastic changes made in the attendance database. This can help stop potential security threats and solve in time.
+2. Solve the problem of verification of the student profile.
+3. Detect possible inappropriate feed content. The permission of posting in the feed is given to specific people only, like head of the clubs, NITW admin, few professors and so. Still there may be chances that inappropriate content may flash out.
+4. Check for the spam posts and block them. The basic idea of building a feed is that, it pays as a source of clean and unignored information to all. This can only be achieved if there is no span of the same post. 
+5. Detect repeated study materials and generate alert on it.
+6. In marketplace show personalized list to according to what data we have regarding a particular set of people. If students of 1st year 2nd sem are showing more interest in drafter, so every 1st year 2nd sem students be shown drafter at the top. 
+7. Similarly, construct algoriths to year specific. There is no point of showing book of last year in first screen to 1st year student. Still while searching manually, he/she can see everything as normal.
+8. Also show gender spicific result. Why show girls cycle to the first screen of a boy. Same approach must be followed for branch and so. This is basically a customized recommendation system.
+
+Considerations:
+1. We have decided to stay with NodeJS for our backend services. Since, our application has more of realtime freatures rather than intense machine learning algos, it is better choice to go with NodeJS. Also, the machine learning models are meant to be implemented in backend and hence the developers are requested to go through the required technologies that are standard and compatible with the backend system. 
+
+Expectations:
+1. The machine learing models need to be highly optimized in terms of performance and speed. 
+2. The models must not interrupt the normal functiontig of the application. 
+3. The models must follow all the standard security protocols that are needed to access data from database and storage.
+
