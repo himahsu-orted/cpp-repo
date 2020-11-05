@@ -1,45 +1,72 @@
 #include <bits/stdc++.h>
-#include <vector>
 using namespace std;
-
 typedef struct node
 {
-	int freq;
-	string letter;
 	struct node *lChild;
+	int data;
 	struct node *rChild;
-} * BST;
+} * bst;
 
-void makeHeap(vector<int> &arr)
+void createTree(bst &(T), int n)
 {
-	int i, j;
-	for (int i = 1; i < arr.size(); i++)
+	if (T == NULL)
 	{
-		j = i;
-		int x = arr[j];
-		while (j > 0 && arr[j / 2] < x)
-		{
-			arr[j] = arr[j / 2];
-			j = j / 2;
-		}
-
-		arr[j] = x;
+		bst ADD = new (struct node);
+		ADD->data = n;
+		ADD->lChild = NULL;
+		ADD->rChild = NULL;
+		T = ADD;
+	}
+	else
+	{
+		if (n > T->data)
+			createTree(T->rChild, n);
+		else
+			createTree(T->lChild, n);
 	}
 }
-vector<int> maxHeapSort(vector<int> arr)
+int sum;
+bool conditionChecker(int i, int j, int k)
 {
-	vector<int> sortedArray;
-
-	while (arr.size() > 0)
+	if (i < j && j < k)
 	{
-		sortedArray.push_back(arr[0]);
-		auto it = arr.end() - 1;
-		arr[0] = *it;
-		arr.erase(it);
-		makeHeap(arr);
+		if (i + j + k == sum)
+			return true;
 	}
+}
+void lastFinder(bst total, int leftDigit, int rightDigit)
+{
+	if (total != NULL)
+	{
 
-	return sortedArray;
+		if (conditionChecker(leftDigit, total->data, rightDigit))
+			cout << leftDigit << " " << total->data << " " << rightDigit<<endl;
+
+		lastFinder(total->lChild, leftDigit, rightDigit);
+		lastFinder(total->rChild, leftDigit, rightDigit);
+	}
+}
+void rightGiver(bst total, bst rightPart, int leftDigit)
+{
+	if (rightPart != NULL)
+	{
+		rightGiver(total, rightPart->rChild, leftDigit);
+
+		lastFinder(total, leftDigit, rightPart->data);
+
+		rightGiver(total, rightPart->lChild, leftDigit);
+	}
+}
+void leftGiver(bst total, bst leftPart, bst rightPart)
+{
+	if (leftPart != NULL)
+	{
+		leftGiver(total, leftPart->lChild, rightPart);
+
+		rightGiver(total, rightPart, leftPart->data);
+
+		leftGiver(total, leftPart->rChild, rightPart);
+	}
 }
 int main()
 {
@@ -51,30 +78,14 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	vector<int> arr;
 	int n;
-
+	bst t = NULL;
 	cin >> n;
-	while (n != 0)
+	while (n > -1)
 	{
-		arr.push_back(n);
+		createTree(t, n);
 		cin >> n;
 	}
-
-	makeHeap(arr);
-
-	for (int i = 0; i < arr.size(); i++)
-		cout << arr[i] << " ";
-
-	cout << endl;
-
-	vector<int> maxHeapSortedArray = maxHeapSort(arr);
-
-	for (int i = 0; i < maxHeapSortedArray.size(); i++)
-		cout << maxHeapSortedArray[i] << " ";
-
-	cout << endl;
-
-	for (int i = 0; i < arr.size(); i++)
-		cout << arr[i] << " ";
+	cin >> sum;
+	leftGiver(t, t->lChild, t->rChild);
 }

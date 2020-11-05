@@ -50,3 +50,8 @@ X[] = { 1, 2, 3, 4, 7 } Y[] = { 8, 9, 10 }
 
 34.k1+k2=34
 
+35. SSS-PPP-BT-Braced Print
+
+36. Mid all questions
+
+
