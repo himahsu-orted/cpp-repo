@@ -54,4 +54,8 @@ X[] = { 1, 2, 3, 4, 7 } Y[] = { 8, 9, 10 }
 
 36. Mid all questions
 
+37. Segment Tree 4 (Minumum Distint Character)
+
+38. Interval Tree
+
 
