@@ -125,6 +125,7 @@ void controller(GT t)
         nodes.clear();
     }
 }
+
 int main()
 {
 #ifndef ONLINE_JUDGE

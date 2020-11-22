@@ -1,49 +1,92 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef struct inode
+typedef struct gtnode
 {
+
 	int data;
-	int low;
-	int high;
-	struct inode *lChild;
-	struct inode *rChild;
-} * IN;
-void createTree(IN &(t), int n, int l, int h)
+	struct gtnode *fc;
+	struct gtnode *ns;
+} * GT;
+void makeTree(GT t)
 {
-	if (t == NULL)
+	int n;
+	cin >> n;
+	if (n != 0)
 	{
-		t = new (struct inode);
-		t->data = n;
-		t->low = l;
-		t->high = h;
-		t->lChild = NULL;
-		t->rChild = NULL;
+		GT add = new (struct gtnode);
+		add->data = n;
+		t->fc = add;
+		makeTree(t->fc);
 	}
 	else
 	{
-		if (t->data < n)
-			t->data = n;
-
-		if (l < t->low)
-		{
-			createTree(t->lChild, n, l, h);
-		}
-		else
-		{
-			createTree(t->rChild, n, l, h);
-		}
+		t->fc = NULL;
+	}
+	cin >> n;
+	if (n != 0)
+	{
+		GT add = new (struct gtnode);
+		add->data = n;
+		t->ns = add;
+		makeTree(t->ns);
+	}
+	else
+	{
+		t->ns = NULL;
 	}
 }
-void display(IN t, int l, int h)
+int depth = 0;
+void getDepth(GT T, int height)
 {
-	if (t != NULL)
+	if (T != NULL)
 	{
-		if (t->low <= l && t->high >= h)
-			cout << t->low << " " << t->high << endl;
-		display(t->lChild, l, h);
-		display(t->rChild, l, h);
+		if (height > depth)
+			depth = height;
+		getDepth(T->fc, height + 1);
+		getDepth(T->ns, height);
 	}
+}
+static bool status = false;
+bool DFS(GT T, int find, int depth, int currentHeight)
+{
+	if (status == true)
+		return status;
+
+	if (currentHeight > depth)
+		return status;
+	else
+	{
+		if (T != NULL)
+		{
+			if (find == T->data)
+			{
+				status = true;
+				return status;
+			}
+			else
+			{
+				DFS(T->fc, find, depth, currentHeight + 1);
+				DFS(T->ns, find, depth, currentHeight);
+			}
+		}
+	}
+	return status;
+}
+bool BFS(GT T, int find)
+{
+	for (int i = 1; i < depth + 1; i++)
+		if (DFS(T, find, i, 1))
+		{
+			return true;
+		}
+
+	return false;
+}
+bool IDS(GT T, int find)
+{
+	status = false;
+	return BFS(T, find);
 }
 int main()
 {
@@ -55,24 +98,23 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	IN t = NULL;
-	int input, n, l, h;
-	cin >> input;
-	while (input != 0)
-	{
+	GT t = new (struct gtnode);
+	int n;
+	cin >> n;
+	t->data = n;
+	t->fc = NULL;
+	t->ns = NULL;
 
-		if (input == 1)
-		{
-			cin >> l >> h >> n;
-			createTree(t, n, l, h);
-		}
-		else if (input == 2)
-		{
-			cin >> l >> h;
-			display(t, l, h);
-		}
-		else
-			break;
+	makeTree(t);
+	getDepth(t, 1);
+
+	int input;
+	cin >> n;
+
+	for (int i = 0; i < n; i++)
+	{
 		cin >> input;
+		cout << IDS(t, input);
+		cout<<endl;
 	}
 }

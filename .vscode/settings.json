@@ -32,7 +32,8 @@
         "iosfwd": "cpp",
         "iterator": "cpp",
         "functional": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "__functional_03": "cpp"
     }
     
 }
