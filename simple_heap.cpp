@@ -2,14 +2,6 @@
 #include <vector>
 using namespace std;
 
-typedef struct node
-{
-    int freq;
-    string letter;
-    struct node *lChild;
-    struct node *rChild;
-} * BST;
-
 void makeHeap(vector<int> &arr)
 {
     int i, j;
@@ -17,7 +9,7 @@ void makeHeap(vector<int> &arr)
     {
         j = i;
         int x = arr[j];
-        while (j > 0 && arr[j / 2] < x)
+        while (j > 0 && arr[j / 2] > x)
         {
             arr[j] = arr[j / 2];
             j = j / 2;
@@ -69,14 +61,6 @@ int main()
     }
 
     makeHeap(arr);
-
-    for (int i = 0; i < arr.size(); i++)
-        cout << arr[i] << " ";
-
-    cout << endl;
-    insertInHeap(arr, 3);
-
-    deleteFromHeap(arr);
 
     for (int i = 0; i < arr.size(); i++)
         cout << arr[i] << " ";
