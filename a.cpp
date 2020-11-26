@@ -1,60 +1,169 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-#define min(x, y, z) min(min(x, y), z)
-#define m 10
-
-typedef struct node
+typedef struct bstnode
 {
-	string word;
-	struct node *ptr[m];
-} * BK;
-int getEditDistance(string a, string b)
-{
-	int row = b.length() + 1;
-	int col = a.length() + 1;
-	int arr[col][row];
-	for (int i = 0; i < col; i++)
-	{
-		for (int j = 0; j < row; j++)
-		{
-			if (i == 0)
-				arr[i][j] = j;
-
-			else if (j == 0)
-				arr[i][j] = i;
-
-			else if (a[i - 1] == b[j - 1])
-				arr[i][j] = arr[i - 1][j - 1];
-
-			else
-				arr[i][j] = 1 + min(arr[i][j - 1],
-									arr[i - 1][j],
-									arr[i - 1][j - 1]);
-		}
-	}
-	return (arr[col - 1][row - 1]);
-}
-void createTree(BK &T, string newString)
+	int data;
+	struct bstnode *lChild;
+	struct bstnode *rChild;
+} * BST;
+void createTree(BST &T, int n)
 {
 	if (!T)
 	{
-		T = new (struct node);
-		T->word = newString;
+		T = new (struct bstnode);
+		T->data = n;
+		T->lChild = NULL;
+		T->rChild = NULL;
 	}
 	else
-		createTree(T->ptr[getEditDistance(newString, T->word)], newString);
+	{
+		if (n > T->data)
+			createTree(T->rChild, n);
+		else
+			createTree(T->lChild, n);
+	}
 }
-void wordFind(BK T, string phrase, int n)
+void display(BST T)
 {
 	if (T)
 	{
+		cout << T->data << " ";
+		display(T->lChild);
+		display(T->rChild);
+	}
+}
+void levelOrder(BST T, queue<BST> q)
+{
+	queue<BST> q2;
+	if (T != NULL)
+	{
+		while (!q.empty())
+		{
+			cout << q.front()->data << " ";
 
-		int d = getEditDistance(T->word, phrase);
-		if (d <= n)
-			cout << d << " " << T->word << " ";
-		for (int i = d - n; i < d + n; i++)
-			wordFind(T->ptr[i], phrase, n);
+			if (q.front()->lChild != NULL)
+				q2.push(q.front()->lChild);
+
+			if (q.front()->rChild != NULL)
+				q2.push(q.front()->rChild);
+
+			q.pop();
+			if (q.empty())
+			{
+				cout << endl;
+				while (!q2.empty())
+				{
+					q.push(q2.front());
+					q2.pop();
+				}
+			}
+		}
+	}
+}
+int height(BST T)
+{
+	if (T)
+	{
+		return (max(height(T->lChild), height(T->rChild)) + 1);
+	}
+	else
+		return 0;
+}
+BST rightRotation(BST T)
+{
+	if (T->lChild)
+	{
+		BST add = T->lChild;
+		T->lChild = add->rChild;
+		add->rChild = T;
+		return add;
+	}
+	else
+		return NULL;
+}
+BST leftRotation(BST T)
+{
+	if (T->rChild)
+	{
+		BST add = T->rChild;
+		T->rChild = add->lChild;
+		add->lChild = T;
+		return add;
+	}
+	else
+		return NULL;
+}
+void findPath(BST T, vector<BST> a, stack<BST> &s, int target)
+{
+	if (T)
+	{
+		if (T->data == target)
+		{
+			for (int i = 0; i < a.size(); i++)
+				s.push(a[i]);
+			return;
+		}
+		a.push_back(T);
+		findPath(T->lChild, a, s, target);
+		findPath(T->rChild, a, s, target);
+	}
+}
+void getWay(BST T, vector<int> temp, vector<int> &per, int target, int i)
+{
+	if (T)
+	{
+		if (i > -1)
+			temp.push_back(i);
+		if (T->data == target)
+		{
+			for (int i = 0; i < temp.size(); i++)
+				per.push_back(temp[i]);
+		}
+		getWay(T->lChild, temp, per, target, 0);
+		getWay(T->rChild, temp, per, target, 1);
+	}
+}
+void compare(BST &T1, BST &T2)
+{
+	stack<BST> s;
+	vector<BST> a;
+	vector<int> way;
+	vector<int> temp;
+	queue<BST> q;
+	if (T2 && T1)
+	{
+		if (T1->data != T2->data)
+		{
+			findPath(T1, a, s, T2->data);
+			getWay(T1, temp, way, T2->data, -1);
+			for (int i = 0; i < way.size(); i++)
+			{
+				BST currentNode = s.top();
+				s.pop();
+				if (way[i] == 1)
+				{
+					if (!s.empty())
+						s.top()->rChild = rightRotation(currentNode);
+					else
+						T1 = rightRotation(currentNode);
+				}
+				else
+				{
+					if (!s.empty())
+						s.top()->lChild = leftRotation(currentNode);
+					else
+						T1 = leftRotation(currentNode);
+				}
+				if (!currentNode)
+				{
+					i--;
+				}
+			}
+		}
+		compare(T1->lChild, T2->lChild);
+		compare(T1->lChild, T2->lChild);
 	}
 }
 int main()
@@ -66,18 +175,31 @@ int main()
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-	string a;
-	BK T;
-	cin >> a;
-	while (1)
-	{
-		createTree(T, a);
-		cin >> a;
-		if (a[0] == '#')
-			break;
-	}
 	int n;
-	cin >> a >> n;
-	wordFind(T, a, n);
+	BST T1 = NULL;
+	BST T2 = NULL;
+
+	cin >> n;
+	while (n != -1)
+	{
+
+		createTree(T1, n);
+		cin >> n;
+	}
+	cin >> n;
+	while (n != -1)
+	{
+
+		createTree(T2, n);
+		cin >> n;
+	}
+
+	stack<BST> s;
+	vector<BST> a;
+
+	// compare(T1, T2);
+	display(T1);
 }

@@ -1,3 +1,2 @@
-some soft same mole soda salmon cse nitw sport #
-
-sort 2 
+3 1 2 -1
+1 2 3 -1
