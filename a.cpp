@@ -1,169 +1,21 @@
 #include <bits/stdc++.h>
-
 using namespace std;
-
-typedef struct bstnode
+static int cycleCount = 0;
+void findCycles(vector<vector<int>> mainArray, vector<int> insideArray, int targetNumeber, vector<int> temp)
 {
-	int data;
-	struct bstnode *lChild;
-	struct bstnode *rChild;
-} * BST;
-void createTree(BST &T, int n)
-{
-	if (!T)
+	for (int i = 0; i < insideArray.size(); i++)
 	{
-		T = new (struct bstnode);
-		T->data = n;
-		T->lChild = NULL;
-		T->rChild = NULL;
-	}
-	else
-	{
-		if (n > T->data)
-			createTree(T->rChild, n);
-		else
-			createTree(T->lChild, n);
-	}
-}
-void display(BST T)
-{
-	if (T)
-	{
-		cout << T->data << " ";
-		display(T->lChild);
-		display(T->rChild);
-	}
-}
-void levelOrder(BST T, queue<BST> q)
-{
-	queue<BST> q2;
-	if (T != NULL)
-	{
-		while (!q.empty())
+		temp.push_back(insideArray[i]);
+		if (insideArray[i] == targetNumeber)
 		{
-			cout << q.front()->data << " ";
-
-			if (q.front()->lChild != NULL)
-				q2.push(q.front()->lChild);
-
-			if (q.front()->rChild != NULL)
-				q2.push(q.front()->rChild);
-
-			q.pop();
-			if (q.empty())
-			{
-				cout << endl;
-				while (!q2.empty())
-				{
-					q.push(q2.front());
-					q2.pop();
-				}
-			}
-		}
-	}
-}
-int height(BST T)
-{
-	if (T)
-	{
-		return (max(height(T->lChild), height(T->rChild)) + 1);
-	}
-	else
-		return 0;
-}
-BST rightRotation(BST T)
-{
-	if (T->lChild)
-	{
-		BST add = T->lChild;
-		T->lChild = add->rChild;
-		add->rChild = T;
-		return add;
-	}
-	else
-		return NULL;
-}
-BST leftRotation(BST T)
-{
-	if (T->rChild)
-	{
-		BST add = T->rChild;
-		T->rChild = add->lChild;
-		add->lChild = T;
-		return add;
-	}
-	else
-		return NULL;
-}
-void findPath(BST T, vector<BST> a, stack<BST> &s, int target)
-{
-	if (T)
-	{
-		if (T->data == target)
-		{
-			for (int i = 0; i < a.size(); i++)
-				s.push(a[i]);
+			for (int j = 0; j < temp.size(); j++)
+				cout << temp[j] + 1 << " ";
+			cycleCount++;
+			cout << endl;
 			return;
 		}
-		a.push_back(T);
-		findPath(T->lChild, a, s, target);
-		findPath(T->rChild, a, s, target);
-	}
-}
-void getWay(BST T, vector<int> temp, vector<int> &per, int target, int i)
-{
-	if (T)
-	{
-		if (i > -1)
-			temp.push_back(i);
-		if (T->data == target)
-		{
-			for (int i = 0; i < temp.size(); i++)
-				per.push_back(temp[i]);
-		}
-		getWay(T->lChild, temp, per, target, 0);
-		getWay(T->rChild, temp, per, target, 1);
-	}
-}
-void compare(BST &T1, BST &T2)
-{
-	stack<BST> s;
-	vector<BST> a;
-	vector<int> way;
-	vector<int> temp;
-	queue<BST> q;
-	if (T2 && T1)
-	{
-		if (T1->data != T2->data)
-		{
-			findPath(T1, a, s, T2->data);
-			getWay(T1, temp, way, T2->data, -1);
-			for (int i = 0; i < way.size(); i++)
-			{
-				BST currentNode = s.top();
-				s.pop();
-				if (way[i] == 1)
-				{
-					if (!s.empty())
-						s.top()->rChild = rightRotation(currentNode);
-					else
-						T1 = rightRotation(currentNode);
-				}
-				else
-				{
-					if (!s.empty())
-						s.top()->lChild = leftRotation(currentNode);
-					else
-						T1 = leftRotation(currentNode);
-				}
-				if (!currentNode)
-				{
-					i--;
-				}
-			}
-		}
-		compare(T1->lChild, T2->lChild);
-		compare(T1->lChild, T2->lChild);
+		findCycles(mainArray, mainArray[insideArray[i]], targetNumeber, temp);
+		temp.pop_back();
 	}
 }
 int main()
@@ -175,31 +27,18 @@ int main()
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
-	cin.tie(NULL);
-	cout.tie(NULL);
 
-	int n;
-	BST T1 = NULL;
-	BST T2 = NULL;
+	int n, e, temp;
+	cin >> n >> e;
 
-	cin >> n;
-	while (n != -1)
+	vector<vector<int>> arr(n);
+	for (int i = 0; i < e; i++)
 	{
-
-		createTree(T1, n);
-		cin >> n;
+		cin >> n >> temp;
+		arr[n - 1].push_back(temp - 1);
 	}
-	cin >> n;
-	while (n != -1)
-	{
-
-		createTree(T2, n);
-		cin >> n;
-	}
-
-	stack<BST> s;
-	vector<BST> a;
-
-	// compare(T1, T2);
-	display(T1);
+	vector<int> cycleArray;
+	cycleArray.push_back(0);
+	findCycles(arr, arr[0], 0, cycleArray);
+	cout << cycleCount;
 }

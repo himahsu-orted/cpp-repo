@@ -9,7 +9,7 @@ typedef struct trienode
     bool isHolder = true;
     union
     {
-        trienode *tnode[4] = {NULL};
+        trienode *tnode[10] = {NULL};
         leafnode *leaf;
     };
 } * TN;
