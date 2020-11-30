@@ -24,7 +24,6 @@ void createTree(MT &T, int n)
             }
             add->mptr[i] = NULL;
         }
-
         add->keys[add->cnt++] = n;
 
         T = add;
