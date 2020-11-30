@@ -31,9 +31,12 @@ void view(BT T)
         if (T->keys[i] != -1)
             cout << T->keys[i] << " ";
     }
+    // cout << endl;
 }
 void shiftNodesAndNewNode(BT &T, SN S)
 {
+    // cout << "Cam f   " << S->data << endl;
+    // cout << "curent is " << T->keys[0] << endl;
     int i;
     for (i = 0; i < m - 1; i++)
         if (T->keys[i] > S->data || T->keys[i] == 0)
@@ -48,6 +51,7 @@ void shiftNodesAndNewNode(BT &T, SN S)
     T->mptr[i] = S->lChild;
     T->mptr[i + 1] = S->rChild;
     T->cnt++;
+    // cout << "curent is " << T->keys[i] << endl;
 }
 void transferToSecondNode(BT &currentNode, BT &splitNode, int partitionPos)
 {
@@ -87,13 +91,23 @@ BT splitIntoTwoNodes(BT &currentNode, SN S)
 
         transferToSecondNode(currentNode, splitNode, partitionPos + 1);
         shiftNodesAndNewNode(splitNode, S);
+        cout << currentNode->cnt;
+        // splitNode->keys[splitNode->cnt] = S->data;
+        // splitNode->mptr[splitNode->cnt] = S->lChild;
+        // splitNode->mptr[splitNode->cnt + 1] = S->rChild;
+        // splitNode->cnt++;
+
+        // cout << splitNode->cnt << "for " << S->data;
     }
     else
     {
+        // cout << "came here for " << S->data;
         /* Here we are into a condtition that the insertion position is before in the array than partition position and that means that we will need to first transfer and then add the new node in the desired position in current node*/
 
         transferToSecondNode(currentNode, splitNode, partitionPos + 1);
         shiftNodesAndNewNode(currentNode, S);
+        cout << currentNode->cnt;
+        // cout << splitNode->cnt << "for " << S->data;
     }
 
     return splitNode;
@@ -111,6 +125,7 @@ void createBTree(BT &mainParent, BT &T, SN S)
 
     if (T->mptr[i] && !S->lChild && !S->rChild)
     {
+        cout << "Getting into recursion at PTR: " << i << " for " << S->data << endl;
         createBTree(T->mptr[i], T->mptr[i], S);
     }
 
@@ -118,7 +133,9 @@ void createBTree(BT &mainParent, BT &T, SN S)
     {
         if (T->cnt < m - 1)
         {
+            cout << "The index of :" << i << " for: " << S->data << endl;
             //Here we are checking if we have some space in the array. This is the condition when we are not into overflow.
+            cout << "Came to add " << S->data << " by shifting. Current: " << T->keys[0] << endl;
             if (T->keys[T->cnt - 1] < S->data)
             {
                 T->keys[T->cnt] = S->data;
@@ -130,17 +147,23 @@ void createBTree(BT &mainParent, BT &T, SN S)
             {
                 shiftNodesAndNewNode(T, S);
             }
+            // cout << "New supposed parent is now " << mainParent->keys[0] << endl;
+            cout << "Current Size is " << T->cnt << endl;
+            view(T);
+            cout << endl;
         }
         else
         {
 
             BT splitNode = splitIntoTwoNodes(T, S);
+            // T->mptr[T->cnt + 1] = NULL;
             SN newParentInfo = new (struct snode);
 
             if (S->lChild && S->rChild)
             {
                 T->mptr[T->cnt] = S->lChild;
                 splitNode->mptr[0] = S->rChild;
+
                 S->lChild = T;
                 S->rChild = splitNode;
             }
@@ -152,7 +175,11 @@ void createBTree(BT &mainParent, BT &T, SN S)
             T->keys[T->cnt - 1] = 0;
             T->mptr[T->cnt] = NULL;
             T->cnt--;
-
+            cout << "Came to add " << S->data << " by splitting\n";
+            view(T);
+            cout << "  ";
+            view(splitNode);
+            cout << endl;
             if (T == mainParent)
             {
                 BT newParent = new (struct bnode);
@@ -163,10 +190,15 @@ void createBTree(BT &mainParent, BT &T, SN S)
                 newParent->cnt++;
 
                 mainParent = newParent;
+
+                cout << "New supposed parent is now " << mainParent->keys[0] << endl;
             }
             else
             {
+
+                cout << "Want to add new parent for " << S->data << " as " << newParentInfo->data << endl;
                 createBTree(mainParent, mainParent, newParentInfo);
+                cout << "After Backtrack" << endl;
             }
         }
     }
@@ -203,7 +235,15 @@ int main()
         SN S = new (struct snode);
         S->data = n;
         createBTree(mainParent, mainParent, S);
+        cout << "New parent is now " << mainParent->keys[0] << " Size: " << mainParent->cnt << endl;
+        cout << endl;
         cin >> n;
+
+        display(mainParent);
+        cout << endl
+             << endl;
     }
-    display(mainParent);
+    // view(mainParent->mptr[]);
+
+    cout << endl;
 }
