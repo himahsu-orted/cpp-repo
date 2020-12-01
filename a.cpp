@@ -1,218 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define m 5
-
-typedef struct bnode
+int getTheVertexWithLeastWeight(int *dist, bool finalDestination[], int size)
 {
-	int cnt = 0;
-	int keys[m - 1] = {0};
-	struct bnode *mptr[m] = {NULL};
-} * BT;
-
-// This snode stands for service pointer node and basically would help in overflow condition.
-typedef struct snode
-{
-	int data;
-	struct bnode *lChild = NULL;
-	struct bnode *rChild = NULL;
-} * SN;
-
-struct tempbnode
-{
-	int cnt;
-	int keys[m] = {0};
-	struct bnode *tmptr[m + 1] = {NULL};
-};
-void view(BT T)
-{
-	for (int i = 0; i < m - 1; i++)
+	int pos = 0;
+	int min = INT_MAX;
+	for (int j = 0; j < size; j++)
 	{
-		if (T->keys[i] != -1)
-			cout << T->keys[i] << " ";
-	}
-	// cout << endl;
-}
-void shiftNodesAndNewNode(BT &T, SN S)
-{
-	// cout << "Cam f   " << S->data << endl;
-	// cout << "curent is " << T->keys[0] << endl;
-	int i;
-	for (i = 0; i < m - 1; i++)
-		if (T->keys[i] > S->data || T->keys[i] == 0)
-			break;
-	for (int j = m - 1; j > i; j--)
-	{
-		if (j < m - 1)
-			T->keys[j] = T->keys[j - 1];
-		T->mptr[j] = T->mptr[j - 1];
-	}
-	T->keys[i] = S->data;
-	T->mptr[i] = S->lChild;
-	T->mptr[i + 1] = S->rChild;
-	T->cnt++;
-	// cout << "curent is " << T->keys[i] << endl;
-}
-void transferToSecondNode(BT &currentNode, BT &splitNode, int partitionPos)
-{
-	int j = 0;
-	for (int i = partitionPos; i < m; i++)
-	{
-		splitNode->mptr[j] = currentNode->mptr[i];
-		currentNode->mptr[i] = NULL;
-
-		if (i < m - 1)
+		if (*(dist + j) <= min && !finalDestination[j])
 		{
-			splitNode->keys[j] = currentNode->keys[i];
-			currentNode->keys[i] = 0;
-			splitNode->cnt++;
-			currentNode->cnt--;
+			min = *(dist + j);
+			pos = j;
 		}
-		j++;
 	}
+	return pos;
 }
-BT splitIntoTwoNodes(BT &currentNode, SN S)
+void Dajikstra(int *arr, int size, int source)
 {
-	BT splitNode = new (struct bnode);
-	int partitionPos = (m - 1) / 2;
-	int i;
-	for (i = 0; i < m - 1; i++)
-		if (currentNode->keys[i] > S->data)
-			break;
-	int InsertionPos = i;
-	if (InsertionPos == partitionPos)
+	int distanceKeeper[size];
+	bool isFinalDestination[size];
+	for (int i = 0; i < size; i++)
 	{
-		transferToSecondNode(currentNode, splitNode, partitionPos);
-		shiftNodesAndNewNode(currentNode, S);
-	}
-	else if (InsertionPos > partitionPos)
-	{
-		/* Here we are first checking if the insertion postition is in the partion area. If it is so then we first transfer the nodes from current node to split node and then add the new node to the last element of split node */
-
-		transferToSecondNode(currentNode, splitNode, partitionPos + 1);
-		shiftNodesAndNewNode(splitNode, S);
-		cout << currentNode->cnt;
-		// splitNode->keys[splitNode->cnt] = S->data;
-		// splitNode->mptr[splitNode->cnt] = S->lChild;
-		// splitNode->mptr[splitNode->cnt + 1] = S->rChild;
-		// splitNode->cnt++;
-
-		// cout << splitNode->cnt << "for " << S->data;
-	}
-	else
-	{
-		// cout << "came here for " << S->data;
-		/* Here we are into a condtition that the insertion position is before in the array than partition position and that means that we will need to first transfer and then add the new node in the desired position in current node*/
-
-		transferToSecondNode(currentNode, splitNode, partitionPos + 1);
-		shiftNodesAndNewNode(currentNode, S);
-		cout << currentNode->cnt;
-		// cout << splitNode->cnt << "for " << S->data;
+		distanceKeeper[i] = INT_MAX;
+		isFinalDestination[i] = false;
 	}
 
-	return splitNode;
-}
-void createBTree(BT &mainParent, BT &T, SN S)
-{
-	int i;
-	for (i = 0; i < m; i++)
-	{
-		if (i < m - 1 && T->keys[i] > S->data)
-			break;
-		else if (T->keys[i] == 0)
-			break;
-	}
+	distanceKeeper[source] = 0;
 
-	if (T->mptr[i] && !S->lChild && !S->rChild)
+	for (int i = 0; i < size - 1; i++)
 	{
-		cout << "Getting into recursion at PTR: " << i << " for " << S->data << endl;
-		createBTree(T->mptr[i], T->mptr[i], S);
-	}
+		int currentWorkingVertex = getTheVertexWithLeastWeight((int *)distanceKeeper, isFinalDestination, size);
 
-	else
-	{
-		if (T->cnt < m - 1)
+		isFinalDestination[currentWorkingVertex] = true;
+
+		for (int j = 0; j < size; j++)
 		{
-			cout << "The index of :" << i << " for: " << S->data << endl;
-			//Here we are checking if we have some space in the array. This is the condition when we are not into overflow.
-			cout << "Came to add " << S->data << " by shifting. Current: " << T->keys[0] << endl;
-			if (T->keys[T->cnt - 1] < S->data)
+			if (!isFinalDestination[j] && *((arr + currentWorkingVertex * size) + j) && distanceKeeper[currentWorkingVertex] != INT_MAX && distanceKeeper[currentWorkingVertex] + *((arr + currentWorkingVertex * size) + j) < distanceKeeper[j])
+
 			{
-				T->keys[T->cnt] = S->data;
-				T->mptr[T->cnt] = S->lChild;
-				T->mptr[T->cnt + 1] = S->rChild;
-				T->cnt++;
-			}
-			else
-			{
-				shiftNodesAndNewNode(T, S);
-			}
-			// cout << "New supposed parent is now " << mainParent->keys[0] << endl;
-			cout << "Current Size is " << T->cnt << endl;
-			view(T);
-			cout << endl;
-		}
-		else
-		{
-
-			BT splitNode = splitIntoTwoNodes(T, S);
-			// T->mptr[T->cnt + 1] = NULL;
-			SN newParentInfo = new (struct snode);
-
-			if (S->lChild && S->rChild)
-			{
-				T->mptr[T->cnt] = S->lChild;
-				splitNode->mptr[0] = S->rChild;
-
-				S->lChild = T;
-				S->rChild = splitNode;
-			}
-
-			newParentInfo->data = T->keys[T->cnt - 1];
-			newParentInfo->lChild = T;
-			newParentInfo->rChild = splitNode;
-
-			T->keys[T->cnt - 1] = 0;
-			T->mptr[T->cnt] = NULL;
-			T->cnt--;
-			cout << "Came to add " << S->data << " by splitting\n";
-			view(T);
-			cout << "  ";
-			view(splitNode);
-			cout << endl;
-			if (T == mainParent)
-			{
-				BT newParent = new (struct bnode);
-
-				newParent->keys[newParent->cnt] = newParentInfo->data;
-				newParent->mptr[newParent->cnt] = newParentInfo->lChild;
-				newParent->mptr[newParent->cnt + 1] = newParentInfo->rChild;
-				newParent->cnt++;
-
-				mainParent = newParent;
-
-				cout << "New supposed parent is now " << mainParent->keys[0] << endl;
-			}
-			else
-			{
-
-				cout << "Want to add new parent for " << S->data << " as " << newParentInfo->data << endl;
-				createBTree(mainParent, mainParent, newParentInfo);
-				cout << "After Backtrack" << endl;
+				distanceKeeper[j] = distanceKeeper[currentWorkingVertex] + *((arr + currentWorkingVertex * size) + j);
 			}
 		}
 	}
-}
-void display(BT T)
-{
-	if (T != NULL)
+	cout << endl;
+	for (int i = 0; i < size; i++)
 	{
-		for (int i = 0; i < m; i++)
-		{
-			display(T->mptr[i]);
-			if (i < m - 1 && T->keys[i] != 0)
-				cout << T->keys[i] << " ";
-		}
+		cout << distanceKeeper[i] << " ";
 	}
 }
 int main()
@@ -225,25 +58,25 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	BT mainParent = new (struct bnode);
-	int n;
-	cin >> n;
-	mainParent->keys[mainParent->cnt++] = n;
-	cin >> n;
-	while (n != -1)
+	/* INPUT CONDTITIONS 
+		1. Enter the number of nodes
+		2. Enter the number of edges
+		3. Enter edges (u,v) and w for the edge.4
+		4. Enter source
+	*/
+	int n, e, k, temp1, temp2;
+	cin >> n >> e >> k;
+
+	int arr[n][n];
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			arr[i][j] = 0;
+	for (int i = 0; i < e; i++)
 	{
-		SN S = new (struct snode);
-		S->data = n;
-		createBTree(mainParent, mainParent, S);
-		cout << "New parent is now " << mainParent->keys[0] << " Size: " << mainParent->cnt << endl;
-		cout << endl;
-		cin >> n;
-
-		display(mainParent);
-		cout << endl
-			 << endl;
+		cin >> temp1 >> temp2;
+		cin >> arr[temp1 - 1][temp2 - 1];
 	}
-	// view(mainParent->mptr[]);
 
-	cout << endl;
+	cin >> temp1;
+	Dajikstra((int *)arr, n, temp1 - 1);
 }

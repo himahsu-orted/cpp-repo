@@ -1,14 +1,15 @@
-#include <bits/stdc++.h>
-using namespace std;
-int main()
-{
-#ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
-#endif
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int a = 98;
-	cout << (char)a;
-}
+
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Options.hpp>
+
+// RAII cleanup
+
+curlpp::Cleanup myCleanup;
+
+// Send request and get a result.
+// Here I use a shortcut to get it in a string stream ...
+
+std::ostringstream os;
+os << curlpp::options::Url(std::string("http://www.wikipedia.org"));
+
+string asAskedInQuestion = os.str();
