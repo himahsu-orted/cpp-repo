@@ -19,43 +19,6 @@ void topologicalSort(vector<vector<VN>> mainArray, vector<VN> insideArray, vecto
 		topologicalSort(mainArray, mainArray[insideArray[i]->data], isVisited, tsort);
 	}
 }
-void longestPath(vector<vector<VN>> mainArray, stack<int> tsort, int source)
-{
-	int size = mainArray.size();
-	int distanceKeeper[size];
-	bool isFinalDestination[size];
-	for (int i = 0; i < size; i++)
-	{
-		distanceKeeper[i] = INT_MAX;
-		isFinalDestination[i] = false;
-	}
-
-	distanceKeeper[source] = 0;
-	while (!tsort.empty())
-	{
-		int currentWorkingVertex = tsort.top();
-		tsort.pop();
-		if (distanceKeeper[currentWorkingVertex] != INT_MAX)
-		{
-			for (int j = 0; j < mainArray[currentWorkingVertex].size(); j++)
-			{
-				if (distanceKeeper[mainArray[currentWorkingVertex][j]->data] > distanceKeeper[currentWorkingVertex] + mainArray[currentWorkingVertex][j]->weight)
-				{
-					distanceKeeper[mainArray[currentWorkingVertex][j]->data] = distanceKeeper[currentWorkingVertex] + mainArray[currentWorkingVertex][j]->weight;
-				}
-			}
-		}
-	}
-	for (int i = 0; i < mainArray.size(); i++)
-	{
-		if (distanceKeeper[i] == INT_MAX)
-			cout << "INF ";
-		if (distanceKeeper[i] == 0)
-			cout << "";
-		else
-			cout << distanceKeeper[i] << " ";
-	}
-}
 int main()
 {
 #ifndef ONLINE_JUDGE
@@ -97,5 +60,11 @@ int main()
 			tsort.push(i);
 		}
 	}
-	longestPath(arr, tsort, 7);
+
+	while (!tsort.empty())
+	{
+		cout << tsort.top();
+		cout << " ";
+		tsort.pop();
+	}
 }

@@ -1,46 +1,167 @@
-#include <bits/stdc++.h>
+// A C++ program to find single source longest distances
+// in a DAG
+#include <iostream>
+#include <limits.h>
+#include <list>
+#include <stack>
+#define NINF INT_MIN
 using namespace std;
-#define min(x, y, z) min(min(x, y), z)
 
-int editDistance(string a, string b)
+// Graph is represented using adjacency list. Every
+// node of adjacency list contains vertex number of
+// the vertex to which edge connects. It also
+// contains weight of the edge
+class AdjListNode
 {
-    int m = a.length(), n = b.length();
-    int dp[m + 1][n + 1];
+	int v;
+	int weight;
 
-    // filling base cases
-    for (int i = 0; i <= m; i++)
-        dp[i][0] = i;
-    for (int j = 0; j <= n; j++)
-        dp[0][j] = j;
+public:
+	AdjListNode(int _v, int _w)
+	{
+		v = _v;
+		weight = _w;
+	}
+	int getV() { return v; }
+	int getWeight() { return weight; }
+};
 
-    // populating matrix using dp-approach
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if (a[i - 1] != b[j - 1])
-            {
-                dp[i][j] = min(1 + dp[i - 1][j],    // deletion
-                               1 + dp[i][j - 1],    // insertion
-                               1 + dp[i - 1][j - 1] // replacement
-                );
-            }
-            else
-                dp[i][j] = dp[i - 1][j - 1];
-        }
-    }
-    return dp[m][n];
+// Class to represent a graph using adjacency list
+// representation
+class Graph
+{
+	int V; // No. of vertices'
+
+	// Pointer to an array containing adjacency lists
+	list<AdjListNode> *adj;
+
+	// A function used by longestPath
+	void topologicalSortUtil(int v, bool visited[],
+							 stack<int> &Stack);
+
+public:
+	Graph(int V); // Constructor
+	~Graph();	  // Destructor
+
+	// function to add an edge to graph
+	void addEdge(int u, int v, int weight);
+
+	// Finds longest distances from given source vertex
+	void longestPath(int s);
+};
+
+Graph::Graph(int V) // Constructor
+{
+	this->V = V;
+	adj = new list<AdjListNode>[V];
 }
 
+Graph::~Graph() // Destructor
+{
+	delete[] adj;
+}
+
+void Graph::addEdge(int u, int v, int weight)
+{
+	AdjListNode node(v, weight);
+	adj[u].push_back(node); // Add v to u's list
+}
+
+// A recursive function used by longestPath. See below
+// link for details
+// https:// www.geeksforgeeks.org/topological-sorting/
+void Graph::topologicalSortUtil(int v, bool visited[],
+								stack<int> &Stack)
+{
+	// Mark the current node as visited
+	visited[v] = true;
+
+	// Recur for all the vertices adjacent to this vertex
+	list<AdjListNode>::iterator i;
+	for (i = adj[v].begin(); i != adj[v].end(); ++i)
+	{
+		AdjListNode node = *i;
+		if (!visited[node.getV()])
+			topologicalSortUtil(node.getV(), visited, Stack);
+	}
+
+	// Push current vertex to stack which stores topological
+	// sort
+	Stack.push(v);
+}
+
+// The function to find longest distances from a given vertex.
+// It uses recursive topologicalSortUtil() to get topological
+// sorting.
+void Graph::longestPath(int s)
+{
+	stack<int> Stack;
+	int dist[V];
+
+	// Mark all the vertices as not visited
+	bool *visited = new bool[V];
+	for (int i = 0; i < V; i++)
+		visited[i] = false;
+
+	// Call the recursive helper function to store Topological
+	// Sort starting from all vertices one by one
+	for (int i = 0; i < V; i++)
+		if (visited[i] == false)
+			topologicalSortUtil(i, visited, Stack);
+
+	// Initialize distances to all vertices as infinite and
+	// distance to source as 0
+	for (int i = 0; i < V; i++)
+		dist[i] = NINF;
+	dist[s] = 0;
+
+	// Process vertices in topological order
+	while (Stack.empty() == false)
+	{
+		// Get the next vertex from topological order
+		int u = Stack.top();
+		Stack.pop();
+
+		// Update distances of all adjacent vertices
+		list<AdjListNode>::iterator i;
+		if (dist[u] != NINF)
+		{
+			for (i = adj[u].begin(); i != adj[u].end(); ++i)
+				if (dist[i->getV()] < dist[u] + i->getWeight())
+					dist[i->getV()] = dist[u] + i->getWeight();
+		}
+	}
+
+	// Print the calculated longest distances
+	for (int i = 0; i < V; i++)
+		(dist[i] == NINF) ? cout << "INF " : cout << dist[i] << " ";
+
+	delete[] visited;
+}
+
+// Driver program to test above functions
 int main()
 {
 #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
 #endif
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
 
-    cout << editDistance("sort", "sport");
+	int n, e, temp, w;
+	cin >> n >> e;
+
+	Graph g(n);
+	for (int i = 0; i < e; i++)
+	{
+		cin >> n >> temp >> w;
+		g.addEdge(n, temp, w);
+	}
+
+	int s = 7;
+	g.longestPath(s);
+
+	return 0;
 }

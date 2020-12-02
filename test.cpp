@@ -1,15 +1,13 @@
-
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Options.hpp>
-
-// RAII cleanup
-
-curlpp::Cleanup myCleanup;
-
-// Send request and get a result.
-// Here I use a shortcut to get it in a string stream ...
-
-std::ostringstream os;
-os << curlpp::options::Url(std::string("http://www.wikipedia.org"));
-
-string asAskedInQuestion = os.str();
+9
+11 
+0 1 0
+0 2 0
+1 3 3.1
+1 5 3.1
+2 5 2.0
+3 4 4.6
+3 6 4.6
+4 7 1.8
+5 6 0.3
+6 7 4
+7 8 3.7    
