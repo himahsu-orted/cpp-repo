@@ -65,8 +65,7 @@ int main()
             MST.push_back(sortedInput[i]);
         }
     }
-    int sum = 0;
     for (int i = 0; i < MST.size(); i++)
-        sum += MST[i]->w;
-    cout << sum;
+        cout << MST[i]->x << " " << MST[i]->y << " " << MST[i]->w << endl;
+   
 }
