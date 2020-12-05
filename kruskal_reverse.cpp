@@ -60,11 +60,21 @@ int main()
     for (int i = 0; i < sortedInput.size(); i++)
     {
         if (find(S, sortedInput[i]->x) != find(S, sortedInput[i]->y))
-        {
             insert(S, sortedInput[i]->x, sortedInput[i]->y);
+
+        else
             MST.push_back(sortedInput[i]);
-        }
     }
-    for (int i = 0; i < MST.size(); i++)
-        cout << MST[i]->x << " " << MST[i]->y << " " << MST[i]->w << endl;
+    for (int i = 0; i < sortedInput.size(); i++)
+    {
+        bool found = false;
+        for (int j = 0; j < MST.size(); j++)
+            if (sortedInput[i]->x == MST[j]->x && sortedInput[i]->y == MST[j]->y)
+            {
+                found = true;
+                break;
+            }
+        if (!found)
+            cout << sortedInput[i]->x << " " << sortedInput[i]->y << "\n";
+    }
 }

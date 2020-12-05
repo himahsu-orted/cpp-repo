@@ -1,13 +1,13 @@
-9
-11 
-0 1 0
-0 2 0
-1 3 3.1
-1 5 3.1
-2 5 2.0
-3 4 4.6
-3 6 4.6
-4 7 1.8
-5 6 0.3
-6 7 4
-7 8 3.7    
+#include<iostream>
+using namespace std;
+typedef struct node{
+  int a;
+  char data;
+}*N;
+int main()
+{
+    int n;
+    cin >> n;
+    cout << "The number you enterd is " << n;
+    return 0;
+}

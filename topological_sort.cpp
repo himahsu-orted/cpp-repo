@@ -5,7 +5,7 @@ typedef struct vertex
 	int data;
 	int weight;
 } * VN;
-static int atCount = 0;
+
 void topologicalSort(vector<vector<VN>> mainArray, vector<VN> insideArray, vector<bool> &isVisited, stack<int> &tsort)
 {
 	for (int i = 0; i < insideArray.size(); i++)

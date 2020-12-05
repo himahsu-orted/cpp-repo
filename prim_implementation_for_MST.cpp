@@ -6,7 +6,7 @@ typedef struct vertex
     int weight;
 } * VN;
 
-void longestPath(vector<vector<VN>> mainArray)
+void primAlgo(vector<vector<VN>> mainArray)
 {
     int size = mainArray.size();
     int totalWeight = 0;
@@ -123,5 +123,5 @@ int main()
         arr[temp - 1].push_back(add2);
     }
 
-    longestPath(arr);
+    primAlgo(arr);
 }
