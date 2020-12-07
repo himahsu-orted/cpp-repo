@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 typedef struct jug
 {
     int vertex;
@@ -10,7 +9,7 @@ typedef struct jug
 void insert(vector<JG> &jugs, int vertex, int weight)
 {
     JG add = new (struct jug);
-    add->vertex = vertex;te
+    add->vertex = vertex;
     add->weight = weight;
     jugs.push_back(add);
 }
@@ -41,5 +40,6 @@ int main()
     insert(jugs, 2, 3);
     insert(jugs, 0, 5);
 
+    cout << jugs.size();
     threeJugs(jugs);
 }

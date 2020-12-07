@@ -101,6 +101,7 @@
         "numbers": "cpp",
         "ranges": "cpp",
         "stop_token": "cpp"
-    }
+    },
+    "editor.quickSuggestions": null
     
 }
