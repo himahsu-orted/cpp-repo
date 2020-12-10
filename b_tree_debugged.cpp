@@ -167,10 +167,6 @@ void createBTree(BT &mainParent, BT &T, SN S)
                 //Here we are just sending the new element to be added to the tree
                 createBTree(mainParent, mainParent, newParentInfo);
             }
-
-            newParentInfo->lChild = NULL;
-            newParentInfo->rChild = NULL;
-            createBTree(mainParent, mainParent, newParentInfo);
         }
     }
 }
@@ -181,7 +177,7 @@ void display(BT T)
         for (int i = 0; i < m; i++)
         {
             display(T->mptr[i]);
-            if (i < m - 1 && T->keys[i] != 0 && !T->mptr[i])
+            if (i < m - 1 && T->keys[i] != 0)
                 cout << T->keys[i] << " ";
         }
     }
