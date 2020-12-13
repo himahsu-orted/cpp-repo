@@ -10,7 +10,6 @@ void topologicalSort(vector<vector<VN>> mainArray, vector<VN> insideArray, vecto
 {
     for (int i = 0; i < insideArray.size(); i++)
     {
-
         if (!isVisited[insideArray[i]->data])
         {
             tsort.push(insideArray[i]->data);

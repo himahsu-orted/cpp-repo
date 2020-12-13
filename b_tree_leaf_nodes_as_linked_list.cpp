@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define m 4
+#define m 3
 
 typedef struct bnode
 {
@@ -23,15 +23,6 @@ typedef struct enode
     int keys[m] = {0};
     struct bnode *eptr[m + 1] = {NULL};
 } * EN;
-void view(BT T)
-{
-    for (int i = 0; i < m - 1; i++)
-    {
-        if (T->keys[i] != -1)
-            cout << T->keys[i] << " ";
-    }
-    // cout << endl;
-}
 void shiftNodesAndAddNewNode(BT &T, SN S)
 {
     int i;
@@ -81,7 +72,7 @@ BT splitIntoTwoNodes(BT &currentNode, SN S)
     int partition = m / 2;
     for (int i = 0; i < m + 1; i++)
     {
-        if (i < partition)
+        if (i <= partition)
         {
             currentNode->mptr[currentNode->cnt] = holder->eptr[i];
             currentNode->keys[currentNode->cnt++] = holder->keys[i];
@@ -108,17 +99,13 @@ void createBTree(BT &mainParent, BT &T, SN S)
     }
     if (T->mptr[i] && !S->lChild && !S->rChild)
     {
-        cout << "Getting into recursion at PTR: " << i << " for " << S->data << " " << T->mptr[i]->cnt << endl;
-        createBTree(T, T->mptr[i], S);
+        createBTree(T->mptr[i], T->mptr[i], S);
     }
 
     else
     {
         if (T->cnt < m - 1)
         {
-            cout << "The index of :" << i << " for: " << S->data << endl;
-            //Here we are checking if we have some space in the array. This is the condition when we are not into overflow.
-            cout << "Came to add " << S->data << " by shifting. Current: " << T->keys[0] << endl;
             //Here we are checking if we have some space in the array. This is the condition when we are not into overflow.
             if (T->keys[T->cnt - 1] < S->data)
             {
@@ -131,10 +118,6 @@ void createBTree(BT &mainParent, BT &T, SN S)
             {
                 shiftNodesAndAddNewNode(T, S);
             }
-
-            cout << "Current Size is " << T->cnt << endl;
-            view(T);
-            cout << endl;
         }
         else
         {
@@ -159,12 +142,7 @@ void createBTree(BT &mainParent, BT &T, SN S)
             T->mptr[T->cnt] = NULL;
             T->cnt--;
 
-            cout << "Came to add " << S->data << " by splitting\n";
-            view(T);
-            cout << "  ";
-            view(splitNode);
-            cout << endl;
-            if (mainParent->cnt > m - 1)
+            if (T == mainParent)
             {
                 //This is where we are creating a new parent of the tree itself
 
@@ -175,63 +153,81 @@ void createBTree(BT &mainParent, BT &T, SN S)
                 newParent->cnt++;
 
                 mainParent = newParent;
-                cout << "New supposed parent is now " << mainParent->keys[0] << endl;
             }
             else
             {
                 //Here we are just sending the new element to be added to the tree
-                cout << "Want to add new parent for " << S->data << " as " << newParentInfo->data << endl;
-                mainParent->keys[mainParent->cnt] = newParentInfo->data;
-                mainParent->mptr[mainParent->cnt] = newParentInfo->lChild;
-                mainParent->mptr[mainParent->cnt + 1] = newParentInfo->rChild;
-                mainParent->cnt++;
-                // cout << "After Backtrack" << endl;
+                createBTree(mainParent, mainParent, newParentInfo);
             }
         }
     }
 }
-void dix(BT T)
+void makeLink(BT T)
 {
+    static BT temp = NULL;
     if (T)
     {
+        bool isLeaf = true;
         for (int i = 0; i < m; i++)
         {
-            dix(T->mptr[i]);
-            if (i < m - 1 && T->keys[i] != 0)
-                cout << T->keys[i] << " ";
+            if (T->mptr[i])
+            {
+                isLeaf = false;
+                break;
+            }
+        }
+        if (isLeaf)
+        {
+            if (temp)
+            {
+                temp->mptr[m - 1] = T;
+            }
+            temp = T;
+        }
+        for (int i = 0; i < m; i++)
+        {
+            makeLink(T->mptr[i]);
         }
     }
 }
-void display(queue<BT> q1)
+void display(BT T)
 {
-
-    queue<BT> q2;
-    while (!q1.empty())
+    static bool isLL = false;
+    if (T)
     {
-        BT currentNode = q1.front();
-        for (int i = 0; i < m; i++)
+        if (!isLL)
         {
-            if (currentNode->mptr[i])
+            bool isLeaf = true;
+            for (int i = 0; i < m - 1; i++)
             {
-                cout << "s";
-                q2.push(currentNode->mptr[i]);
+                if (T->mptr[i])
+                {
+                    isLeaf = false;
+                    break;
+                }
             }
-            if (i < m - 1)
-                if (currentNode->keys[i] != 0)
-                    cout << currentNode->keys[i] << " ";
+            if (isLeaf)
+            {
+                isLL = true;
+                for (int i = 0; i < m - 1; i++)
+                    if (T->keys[i] != 0)
+                        cout << T->keys[i] << " ";
+                display(T->mptr[m - 1]);
+            }
+            else
+            {
+
+                display(T->mptr[0]);
+            }
         }
-        q1.pop();
+        else
+        {
+            for (int i = 0; i < m - 1; i++)
+                if (T->keys[i] != 0)
+                    cout << T->keys[i] << " ";
+            display(T->mptr[m - 1]);
+        }
     }
-    // if (q1.empty())
-    // {
-    //     cout << endl;
-    //     while (!q2.empty())
-    //     {
-    //         q1.push(q2.front());
-    //         q1.pop();
-    //     }
-    // }
-    // }
 }
 int main()
 {
@@ -253,12 +249,8 @@ int main()
         SN S = new (struct snode);
         S->data = n;
         createBTree(mainParent, mainParent, S);
-        cout << "New parent is now " << mainParent->keys[0] << " Size: " << mainParent->cnt << endl;
-        cout << endl;
         cin >> n;
     }
-    queue<BT> q1;
-    q1.push(mainParent);
-    // display(q1);
-    dix(mainParent);
+    makeLink(mainParent);
+    display(mainParent);
 }

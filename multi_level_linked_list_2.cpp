@@ -53,14 +53,12 @@ struct mlnode *Mcreate()
     M1->mext = NULL;
     M1->Lnode = NULL;
     mlInsert(M1);
-
     return M1;
 }
 void displayMList(ML S)
 {
     if (S != NULL)
     {
-
         cout << S->data << " ";
         displayMList(S->mext);
     }

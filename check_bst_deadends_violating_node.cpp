@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 typedef struct node
@@ -7,8 +7,8 @@ typedef struct node
 	struct node *lChild;
 	struct node *rChild;
 
-} *BST;
-void createTree(BST & (T))
+} * BST;
+void createTree(BST &(T))
 {
 	int n;
 	cin >> n;
@@ -28,12 +28,12 @@ void createTree(BST & (T))
 	createTree(T->lChild);
 	createTree(T->rChild);
 }
-void createBST(BST & (T), int num)
+void createBST(BST &(T), int num)
 {
 	if (T == NULL)
 	{
 		BST add;
-		add = new(struct node);
+		add = new (struct node);
 		add->data = num;
 		add->lChild = NULL;
 		add->rChild = NULL;
@@ -46,8 +46,6 @@ void createBST(BST & (T), int num)
 		else
 			createBST(T->lChild, num);
 	}
-
-
 }
 void display(BST T)
 {
@@ -76,13 +74,9 @@ void findDeadEnd(BST T, int min, int max)
 		if (min == max)
 			deadEnd.push_back(T->data);
 
-
-
 		findDeadEnd(T->lChild, min, T->data - 1);
 
-
 		findDeadEnd(T->rChild, T->data + 1, max);
-
 	}
 }
 int main()
@@ -131,5 +125,4 @@ int main()
 	}
 	else
 		cout << "The tree has no dead ends.\n";
-
 }
