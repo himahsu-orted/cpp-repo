@@ -80,4 +80,4 @@ int main()
 	int n;
 	cin >> a >> n;
 	wordFind(T, a, n);
-}
+	}
