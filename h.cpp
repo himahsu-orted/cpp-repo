@@ -1,98 +1,193 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-typedef struct gtnode
+#define m 3
+typedef struct bnode
 {
-  char data;
-  struct gtnode *fc;
-  struct gtnode *ns;
-} * GT;
-typedef struct node
+  int cnt = 0;
+  int keys[m - 1] = {0};
+  struct bnode *mptr[m] = {NULL};
+} * BT;
+typedef struct snode
 {
-  char data;
-  struct node *lChild;
-  struct node *rChild;
-} * BST;
-void makeTree(GT t, vector<char> arr)
+  int data;
+  struct bnode *lChild = NULL;
+  struct bnode *rChild = NULL;
+} * SN;
+typedef struct enode
 {
-  static int j = 1;
-
-  if (j < arr.size())
-    return;
-  char n;
-  n = arr[j++];
-  if (n != '.')
-  {
-    GT add = new (struct gtnode);
-    add->data = n;
-    t->fc = add;
-    makeTree(t->fc, arr);
-  }
-  else
-  {
-    t->fc = NULL;
-  }
-  if (j < arr.size())
-    return;
-  n = arr[j++];
-  if (n != '.')
-  {
-    GT add = new (struct gtnode);
-    add->data = n;
-    t->ns = add;
-    makeTree(t->ns, arr);
-  }
-  else
-  {
-    t->ns = NULL;
-  }
-}
-void serialize(GT T, vector<char> &arr)
+  int cnt = 0;
+  int keys[m] = {0};
+  struct bnode *eptr[m + 1] = {NULL};
+} * EN;
+void display(BT T)
 {
   if (T)
   {
-    cout << T->data;
-    serialize(T->fc, arr);
-    serialize(T->ns, arr);
+    for (int i = 0; i < m; i++)
+    {
+      display(T->mptr[i]);
+      if (i < m - 1 && T->keys[i] != 0)
+        cout << T->keys[i] << " ";
+    }
   }
-  // else
-  //   arr.push_back('.');
 }
-void serializeBST(BST T, vector<char> arr)
+void levelOrder(queue<BT> q)
 {
-  if (T)
+  queue<BT> q2;
+  while (!q.empty())
   {
-    arr.push_back(T->data);
-    serializeBST(T->lChild, arr);
-    serializeBST(T->rChild, arr);
+    BT temp = q.front();
+    q.pop();
+    for (int i = 0; i < m; i++)
+    {
+      if (i < m - 1 && temp->keys[i] != 0)
+        cout << temp->keys[i] << " ";
+      if (temp->mptr[i])
+        q2.push(temp->mptr[i]);
+    }
+    if (q.empty())
+    {
+      cout << endl;
+      while (!q2.empty())
+      {
+        q.push(q2.front());
+        q2.pop();
+      }
+    }
   }
-  else
-    arr.push_back('.');
 }
-void createBinaryTree(BST &T, vector<char> arr)
+void shiftNodesAndAddNewNode(BT &T, SN S)
 {
-  static int i = 0;
-  char n = arr[i++];
-  if (n == '.')
-    return;
-  if (!T)
+  int i;
+  for (i = 0; i < m - 1; i++)
+    if (T->keys[i] > S->data || T->keys[i] == 0)
+      break;
+  for (int j = m - 1; j > i; j--)
   {
-    BST ADD = new (struct node);
-    ADD->data = n;
-    ADD->lChild = NULL;
-    ADD->rChild = NULL;
-    T = ADD;
+    if (j < m - 1)
+      T->keys[j] = T->keys[j - 1];
+    T->mptr[j] = T->mptr[j - 1];
   }
-  createBinaryTree(T->lChild, arr);
-  createBinaryTree(T->rChild, arr);
+  T->keys[i] = S->data;
+  T->mptr[i] = S->lChild;
+  T->mptr[i + 1] = S->rChild;
+  T->cnt++;
 }
-void display(BST T)
+BT splitIntoTwoNodes(BT &currentNode, SN S)
 {
-  if (T != NULL)
+  EN holder = new (struct enode);
+  BT splitNode = new (struct bnode);
+  bool isPut = false;
+  for (int i = 0; i < m; i++)
   {
-    cout << T->data << " ";
-    display(T->lChild);
-    display(T->rChild);
+    if (currentNode->keys[i] > S->data && !isPut)
+    {
+      holder->eptr[holder->cnt] = S->lChild;
+      holder->eptr[holder->cnt + 1] = S->rChild;
+      holder->keys[holder->cnt++] = S->data;
+      isPut = true;
+    }
+    if (!holder->eptr[holder->cnt])
+    {
+      holder->eptr[holder->cnt] = currentNode->mptr[i];
+    }
+    currentNode->mptr[i] = NULL;
+    if (currentNode->cnt != 0)
+    {
+      holder->keys[holder->cnt++] = currentNode->keys[i];
+      currentNode->keys[i] = 0;
+      currentNode->cnt--;
+    }
+  }
+  if (!isPut)
+  {
+    holder->eptr[holder->cnt] = S->lChild;
+    holder->eptr[holder->cnt + 1] = S->rChild;
+    holder->keys[holder->cnt++] = S->data;
+    isPut = true;
+  }
+  int partition = (m / 2);
+  for (int i = 0; i < m + 1; i++)
+  {
+    if (i <= partition)
+    {
+      currentNode->mptr[currentNode->cnt] = holder->eptr[i];
+      currentNode->keys[currentNode->cnt++] = holder->keys[i];
+    }
+    else
+    {
+      splitNode->mptr[splitNode->cnt] = holder->eptr[i];
+      if (i < m)
+        splitNode->keys[splitNode->cnt++] = holder->keys[i];
+    }
+  }
+  return splitNode;
+}
+void getLevelStack(BT T, stack<BT> &levels, SN S)
+{
+  levels.push(T);
+  int i;
+  for (i = 0; i < m; i++)
+  {
+    if (i < m - 1 && T->keys[i] > S->data)
+      break;
+    else if (T->keys[i] == 0)
+      break;
+  }
+  if (T->mptr[i])
+  {
+    getLevelStack(T->mptr[i], levels, S);
+  }
+}
+void controller(BT &T, SN S)
+{
+
+  stack<BT> levels;
+  getLevelStack(T, levels, S);
+  while (!levels.empty())
+  {
+
+    BT curr = levels.top();
+    levels.pop();
+
+    //Here we are checking if we have some space in the array. This is the condition when we are not into overflow.
+    if (curr->cnt < m - 1)
+    {
+      if (curr->keys[curr->cnt - 1] < S->data)
+      {
+        curr->keys[curr->cnt] = S->data;
+        curr->mptr[curr->cnt] = S->lChild;
+        curr->mptr[curr->cnt + 1] = S->rChild;
+        curr->cnt++;
+      }
+      else
+      {
+        shiftNodesAndAddNewNode(curr, S);
+      }
+      break;
+    }
+    // When there is no space in the array and we need to work with some overflow conditions
+    else
+    {
+      BT splitNode = splitIntoTwoNodes(curr, S);
+
+      S->data = curr->keys[curr->cnt - 1];
+      S->lChild = curr;
+      S->rChild = splitNode;
+
+      curr->keys[curr->cnt - 1] = 0;
+      curr->mptr[curr->cnt] = NULL;
+      curr->cnt--;
+    }
+    if (curr == T)
+    {
+      BT newParent = new (struct bnode);
+      newParent->mptr[newParent->cnt] = S->lChild;
+      newParent->mptr[newParent->cnt + 1] = S->rChild;
+      newParent->keys[newParent->cnt++] = S->data;
+      T = newParent;
+      break;
+    }
   }
 }
 int main()
@@ -104,29 +199,22 @@ int main()
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
   cout.tie(NULL);
-  BST T = NULL;
 
-  vector<char> arr;
-  char ch;
-  cin >> ch;
-  while (ch != '#')
+  BT mainParent = new (struct bnode);
+  int n;
+  cin >> n;
+  mainParent->keys[mainParent->cnt++] = n;
+  cin >> n;
+  while (n != -1)
   {
-    arr.push_back(ch);
-    cin >> ch;
+    SN S = new (struct snode);
+    S->data = n;
+    controller(mainParent, S);
+    cin >> n;
   }
-  GT t = new (struct gtnode);
-  char n;
-  n = arr[0];
-  t->data = n;
-  t->fc = NULL;
-  t->ns = NULL;
-  makeTree(t, arr);
-  // arr.clear();
-  cout << t->fc->fc->data;
-  // serialize(t, arr);
-  // createBinaryTree(T, arr);
-  // for (int i = 0; i < arr.size(); i++)
-  //   cout << arr[i] << " ";
-  // cout << endl;
-  // display(T);
+  display(mainParent);
+  cout << endl;
+  queue<BT> q;
+  q.push(mainParent);
+  levelOrder(q);
 }
